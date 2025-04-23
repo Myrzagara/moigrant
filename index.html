@@ -130,7 +130,13 @@
       const comboId = document.getElementById('combo').value;
       const specialtyId = document.getElementById('specialty').value;
       const universityId = document.getElementById('university').value;
-      
+        // Проверка ЕНТ балла
+  if (score < 0 || score > 140 || isNaN(score)) {
+    document.getElementById('result').textContent = lang === 'ru' 
+      ? 'ЕНТ балл должен быть числом от 0 до 140' 
+      : 'ҰБТ балы 0 мен 140 аралығында болуы керек';
+    return;
+  }
       if (!score || !comboId || !specialtyId || !universityId || !cityId) {
         document.getElementById('result').textContent = lang === 'ru' 
           ? 'Пожалуйста, заполните все поля' 
