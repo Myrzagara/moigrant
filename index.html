@@ -59,7 +59,7 @@
 
   <script>
     let lang = 'ru';
-
+  
     const translations = {
       ru: {
         title: 'Шанс на грант',
@@ -84,13 +84,13 @@
         scorePlaceholder: 'Балды енгізіңіз'
       }
     };
-
+  
     function setLanguage(l) {
       lang = l;
       updateLanguage();
       updateSelects(); // Обновить все списки при смене языка
     }
-
+  
     function updateLanguage() {
       const t = translations[lang];
       document.getElementById('title').textContent = t.title;
@@ -101,7 +101,7 @@
       document.getElementById('label-university').textContent = t.university;
       document.getElementById('check-btn').textContent = t.btn;
       document.getElementById('score').placeholder = t.scorePlaceholder;
-
+  
       // Обновляем плейсхолдеры в селектах
       document.querySelectorAll('select').forEach(select => {
         if (select.options.length > 0) {
@@ -109,7 +109,7 @@
         }
       });
     }
-
+  
     async function fetchData(endpoint) {
       try {
         const res = await fetch(endpoint);
@@ -120,7 +120,7 @@
         return [];
       }
     }
-
+  
     async function populateSelect(id, endpoint, keyPrefix = 'name') {
       const data = await fetchData(endpoint);
       const select = document.getElementById(id);
@@ -137,7 +137,7 @@
         select.appendChild(option);
       });
     }
-
+  
     async function updateSelects() {
       await populateSelect('city', 'https://api.moigrant.kz/cities', 'name');
       await populateSelect('combo', 'https://api.moigrant.kz/combinations', 'name');
@@ -145,14 +145,32 @@
       document.getElementById('specialty').innerHTML = `<option value="">${translations[lang].select}...</option>`;
       document.getElementById('university').innerHTML = `<option value="">${translations[lang].select}...</option>`;
     }
-
+  
+    async function populateSpecialties() {
+      const comboId = document.getElementById('combo').value;
+      if (!comboId) return;
+  
+      const endpoint = `https://api.moigrant.kz/programs?id_combination=${comboId}`;
+      const specialties = await fetchData(endpoint);
+  
+      const specialtySelect = document.getElementById('specialty');
+      specialtySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
+  
+      specialties.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = lang === 'ru' ? item.name_ru : item.name_kz;
+        specialtySelect.appendChild(option);
+      });
+    }
+  
     async function checkChance() {
       const cityId = document.getElementById('city').value;
       const score = document.getElementById('score').value;
       const comboId = document.getElementById('combo').value;
       const specialtyId = document.getElementById('specialty').value;
       const universityId = document.getElementById('university').value;
-
+  
       // Проверка ЕНТ балла
       if (score < 0 || score > 140 || isNaN(score)) {
         document.getElementById('result').textContent = lang === 'ru' 
@@ -160,21 +178,21 @@
           : 'ҰБТ балы 0 мен 140 аралығында болуы керек';
         return;
       }
-
+  
       if (!score || !comboId || !specialtyId || !universityId || !cityId) {
         document.getElementById('result').textContent = lang === 'ru' 
           ? 'Пожалуйста, заполните все поля' 
           : 'Барлық өрістерді толтырыңыз';
         return;
       }
-
+  
       try {
         const res = await fetch('https://your-api-url/check', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ score, comboId, specialtyId, universityId, cityId })
         });
-
+  
         const data = await res.json();
         document.getElementById('result').textContent = lang === 'ru'
           ? `Ваш шанс: ${data.chance}%`
@@ -186,19 +204,15 @@
           : 'Мүмкіндікті есептеу кезінде қате';
       }
     }
-
+  
     window.onload = async () => {
       updateLanguage();
       await updateSelects();
-
+  
       document.getElementById('combo').addEventListener('change', async (e) => {
-        const specialtySelect = document.getElementById('specialty');
-        specialtySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
-        if (e.target.value) {
-          await populateSelect('specialty', `https://your-api-url/specialties?comboId=${e.target.value}`, 'name');
-        }
+        await populateSpecialties();  // Вызываем функцию для загрузки специальностей
       });
-
+  
       document.getElementById('specialty').addEventListener('change', async (e) => {
         const universitySelect = document.getElementById('university');
         universitySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
@@ -209,5 +223,6 @@
       });
     };
   </script>
+  
 </body>
 </html>
