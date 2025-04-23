@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Шанс на грант</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4">
+    <div class="flex justify-between">
+      <h1 class="text-xl font-bold">Шанс на грант</h1>
+      <select id="language" class="border rounded px-2 py-1">
+        <option value="ru">Рус</option>
+        <option value="kz">Қаз</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="city" class="block text-sm font-medium">Город</label>
+      <select id="city" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите город</option>
+        <!-- Динамически заполняется -->
+      </select>
+    </div>
+
+    <div>
+      <label for="score" class="block text-sm font-medium">ЕНТ балл</label>
+      <input id="score" type="number" class="w-full border rounded px-3 py-2 mt-1" placeholder="Введите балл">
+    </div>
+
+    <div>
+      <label for="combo" class="block text-sm font-medium">Комбинация предметов</label>
+      <select id="combo" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите комбинацию</option>
+        <!-- Динамически заполняется -->
+      </select>
+    </div>
+
+    <div>
+      <label for="specialty" class="block text-sm font-medium">Специальность</label>
+      <select id="specialty" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите специальность</option>
+        <!-- Зависит от combo -->
+      </select>
+    </div>
+
+    <div>
+      <label for="university" class="block text-sm font-medium">Университет</label>
+      <select id="university" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите университет</option>
+        <!-- Зависит от specialty и city -->
+      </select>
+    </div>
+
+    <button onclick="checkChance()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">Узнать шансы</button>
+
+    <div id="result" class="text-center text-lg font-semibold mt-4"></div>
+  </div>
+
+  <script>
+    async function fetchData(endpoint) {
+      const res = await fetch(endpoint);
+      return res.json();
+    }
+
+    async function populateSelect(id, endpoint) {
+      const data = await fetchData(endpoint);
+      const select = document.getElementById(id);
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item.name;
+        select.appendChild(option);
+      });
+    }
+
+    async function checkChance() {
+      const cityId = document.getElementById('city').value;
+      const score = document.getElementById('score').value;
+      const comboId = document.getElementById('combo').value;
+      const specialtyId = document.getElementById('specialty').value;
+      const universityId = document.getElementById('university').value;
+      
+      if (!score || !comboId || !specialtyId || !universityId || !cityId) {
+        document.getElementById('result').textContent = 'Пожалуйста, заполните все поля';
+        return;
+      }
+
+      const res = await fetch('https://your-api-url/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ score, comboId, specialtyId, universityId, cityId })
+      });
+
+      const data = await res.json();
+      document.getElementById('result').textContent = `Ваш шанс: ${data.chance}%`;
+    }
+
+    // Загрузка данных при старте
+    window.onload = async () => {
+      await populateSelect('city', 'https://your-api-url/cities');
+      await populateSelect('combo', 'https://your-api-url/combinations');
+
+      document.getElementById('combo').addEventListener('change', async (e) => {
+        const specialtySelect = document.getElementById('specialty');
+        specialtySelect.innerHTML = '<option value="">Выберите специальность</option>';
+        await populateSelect('specialty', `https://your-api-url/specialties?comboId=${e.target.value}`);
+      });
+
+      document.getElementById('specialty').addEventListener('change', async (e) => {
+        const universitySelect = document.getElementById('university');
+        universitySelect.innerHTML = '<option value="">Выберите университет</option>';
+        const cityId = document.getElementById('city').value;
+        await populateSelect('university', `https://your-api-url/universities?specialtyId=${e.target.value}&cityId=${cityId}`);
+      });
+    }
+  </script>
+</body>
+</html>
