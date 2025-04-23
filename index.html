@@ -152,7 +152,7 @@
 
     window.onload = async () => {
       updateLanguage();
-      await populateSelect('city', 'https://your-api-url/cities');
+      await populateSelect('city', 'http://31.130.154.132:8080/cities');
       await populateSelect('combo', 'https://your-api-url/combinations');
 
       document.getElementById('combo').addEventListener('change', async (e) => {
