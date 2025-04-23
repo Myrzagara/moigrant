@@ -69,7 +69,8 @@
         specialty: 'Специальность',
         university: 'Университет',
         btn: 'Узнать шансы',
-        select: 'Выберите'
+        select: 'Выберите',
+        scorePlaceholder: 'Введите балл'
       },
       kz: {
         title: 'Грант мүмкіндігі',
@@ -79,14 +80,15 @@
         specialty: 'Мамандық',
         university: 'Университет',
         btn: 'Мүмкіндікті білу',
-        select: 'Таңдаңыз'
+        select: 'Таңдаңыз',
+        scorePlaceholder: 'Балды енгізіңіз'
       }
     };
 
     function setLanguage(l) {
       lang = l;
       updateLanguage();
-      updateComboSelect(); // Обновить список комбинаций при смене языка
+      updateSelects(); // Обновить все списки при смене языка
     }
 
     function updateLanguage() {
@@ -98,9 +100,9 @@
       document.getElementById('label-specialty').textContent = t.specialty;
       document.getElementById('label-university').textContent = t.university;
       document.getElementById('check-btn').textContent = t.btn;
+      document.getElementById('score').placeholder = t.scorePlaceholder;
 
-      document.getElementById('score').placeholder = lang === 'ru' ? 'Введите балл' : 'Балды енгізіңіз';
-
+      // Обновляем плейсхолдеры в селектах
       document.querySelectorAll('select').forEach(select => {
         if (select.options.length > 0) {
           select.options[0].text = t.select + '...';
@@ -109,25 +111,39 @@
     }
 
     async function fetchData(endpoint) {
-      const res = await fetch(endpoint);
-      return res.json();
+      try {
+        const res = await fetch(endpoint);
+        if (!res.ok) throw new Error('Network response was not ok');
+        return await res.json();
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+      }
     }
 
-    async function populateSelect(id, endpoint, language) {
+    async function populateSelect(id, endpoint, keyPrefix = 'name') {
       const data = await fetchData(endpoint);
       const select = document.getElementById(id);
-      select.innerHTML = `<option value="">${translations[lang].select}...</option>`;
+      if (!select) return;
+      
+      const t = translations[lang];
+      select.innerHTML = `<option value="">${t.select}...</option>`;
+      
       data.forEach(item => {
         const option = document.createElement('option');
         option.value = item.id;
-        option.textContent = language === 'ru' ? item.name_ru : item.name_kz; // Отображаем правильное название в зависимости от языка
+        // Используем правильное поле в зависимости от языка
+        option.textContent = item[`${keyPrefix}_${lang}`] || item.name || item.id;
         select.appendChild(option);
       });
     }
 
-    async function updateComboSelect() {
-      // Заполним список комбинаций в зависимости от языка
-      await populateSelect('combo', 'https://api.moigrant.kz/combinations', lang);
+    async function updateSelects() {
+      await populateSelect('city', 'https://api.moigrant.kz/cities', 'name');
+      await populateSelect('combo', 'https://api.moigrant.kz/combinations', 'name');
+      // Очищаем зависимые списки
+      document.getElementById('specialty').innerHTML = `<option value="">${translations[lang].select}...</option>`;
+      document.getElementById('university').innerHTML = `<option value="">${translations[lang].select}...</option>`;
     }
 
     async function checkChance() {
@@ -152,34 +168,44 @@
         return;
       }
 
-      const res = await fetch('https://your-api-url/check', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ score, comboId, specialtyId, universityId, cityId })
-      });
+      try {
+        const res = await fetch('https://your-api-url/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ score, comboId, specialtyId, universityId, cityId })
+        });
 
-      const data = await res.json();
-      document.getElementById('result').textContent = lang === 'ru'
-        ? `Ваш шанс: ${data.chance}%`
-        : `Сіздің мүмкіндігіңіз: ${data.chance}%`;
+        const data = await res.json();
+        document.getElementById('result').textContent = lang === 'ru'
+          ? `Ваш шанс: ${data.chance}%`
+          : `Сіздің мүмкіндігіңіз: ${data.chance}%`;
+      } catch (error) {
+        console.error('Error checking chance:', error);
+        document.getElementById('result').textContent = lang === 'ru'
+          ? 'Ошибка при расчете шансов'
+          : 'Мүмкіндікті есептеу кезінде қате';
+      }
     }
 
     window.onload = async () => {
       updateLanguage();
-      await populateSelect('city', 'https://api.moigrant.kz/cities', lang);
-      await updateComboSelect(); // Заполним комбинации при загрузке
+      await updateSelects();
 
       document.getElementById('combo').addEventListener('change', async (e) => {
         const specialtySelect = document.getElementById('specialty');
         specialtySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
-        await populateSelect('specialty', `https://your-api-url/specialties?comboId=${e.target.value}`, lang);
+        if (e.target.value) {
+          await populateSelect('specialty', `https://your-api-url/specialties?comboId=${e.target.value}`, 'name');
+        }
       });
 
       document.getElementById('specialty').addEventListener('change', async (e) => {
         const universitySelect = document.getElementById('university');
         universitySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
         const cityId = document.getElementById('city').value;
-        await populateSelect('university', `https://your-api-url/universities?specialtyId=${e.target.value}&cityId=${cityId}`, lang);
+        if (e.target.value && cityId) {
+          await populateSelect('university', `https://your-api-url/universities?specialtyId=${e.target.value}&cityId=${cityId}`, 'name');
+        }
       });
     };
   </script>
