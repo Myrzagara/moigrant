@@ -86,6 +86,7 @@
     function setLanguage(l) {
       lang = l;
       updateLanguage();
+      updateComboSelect(); // Обновить список комбинаций при смене языка
     }
 
     function updateLanguage() {
@@ -112,16 +113,21 @@
       return res.json();
     }
 
-    async function populateSelect(id, endpoint) {
+    async function populateSelect(id, endpoint, language) {
       const data = await fetchData(endpoint);
       const select = document.getElementById(id);
       select.innerHTML = `<option value="">${translations[lang].select}...</option>`;
       data.forEach(item => {
         const option = document.createElement('option');
         option.value = item.id;
-        option.textContent = item.name;
+        option.textContent = language === 'ru' ? item.name_ru : item.name_kz; // Отображаем правильное название в зависимости от языка
         select.appendChild(option);
       });
+    }
+
+    async function updateComboSelect() {
+      // Заполним список комбинаций в зависимости от языка
+      await populateSelect('combo', 'https://api.moigrant.kz/combinations', lang);
     }
 
     async function checkChance() {
@@ -130,13 +136,15 @@
       const comboId = document.getElementById('combo').value;
       const specialtyId = document.getElementById('specialty').value;
       const universityId = document.getElementById('university').value;
-        // Проверка ЕНТ балла
-  if (score < 0 || score > 140 || isNaN(score)) {
-    document.getElementById('result').textContent = lang === 'ru' 
-      ? 'ЕНТ балл должен быть числом от 0 до 140' 
-      : 'ҰБТ балы 0 мен 140 аралығында болуы керек';
-    return;
-  }
+
+      // Проверка ЕНТ балла
+      if (score < 0 || score > 140 || isNaN(score)) {
+        document.getElementById('result').textContent = lang === 'ru' 
+          ? 'ЕНТ балл должен быть числом от 0 до 140' 
+          : 'ҰБТ балы 0 мен 140 аралығында болуы керек';
+        return;
+      }
+
       if (!score || !comboId || !specialtyId || !universityId || !cityId) {
         document.getElementById('result').textContent = lang === 'ru' 
           ? 'Пожалуйста, заполните все поля' 
@@ -158,20 +166,20 @@
 
     window.onload = async () => {
       updateLanguage();
-      await populateSelect('city', 'https://api.moigrant.kz/cities');
-      await populateSelect('combo', 'https://your-api-url/combinations');
+      await populateSelect('city', 'https://api.moigrant.kz/cities', lang);
+      await updateComboSelect(); // Заполним комбинации при загрузке
 
       document.getElementById('combo').addEventListener('change', async (e) => {
         const specialtySelect = document.getElementById('specialty');
         specialtySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
-        await populateSelect('specialty', `https://your-api-url/specialties?comboId=${e.target.value}`);
+        await populateSelect('specialty', `https://your-api-url/specialties?comboId=${e.target.value}`, lang);
       });
 
       document.getElementById('specialty').addEventListener('change', async (e) => {
         const universitySelect = document.getElementById('university');
         universitySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
         const cityId = document.getElementById('city').value;
-        await populateSelect('university', `https://your-api-url/universities?specialtyId=${e.target.value}&cityId=${cityId}`);
+        await populateSelect('university', `https://your-api-url/universities?specialtyId=${e.target.value}&cityId=${cityId}`, lang);
       });
     };
   </script>
