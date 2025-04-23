@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Шанс на грант</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-4">
   <div class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4">
+    
     <div class="flex justify-between items-center">
       <h1 id="title" class="text-xl font-bold">Шанс на грант</h1>
-      <select id="language" class="border rounded px-2 py-1" onchange="setLanguage(this.value)">
-        <option value="ru">Рус</option>
-        <option value="kz">Қаз</option>
-      </select>
+      <div class="flex space-x-2">
+        <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
+        <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
+      </div>
     </div>
 
     <div>
       <label id="label-city" for="city" class="block text-sm font-medium">Город</label>
       <select id="city" class="w-full border rounded px-3 py-2 mt-1">
-        <option value="">Выберите город</option>
+        <option value="">Выберите город...</option>
       </select>
     </div>
 
@@ -31,31 +32,33 @@
     <div>
       <label id="label-combo" for="combo" class="block text-sm font-medium">Комбинация предметов</label>
       <select id="combo" class="w-full border rounded px-3 py-2 mt-1">
-        <option value="">Выберите комбинацию</option>
+        <option value="">Выберите комбинацию...</option>
       </select>
     </div>
 
     <div>
       <label id="label-specialty" for="specialty" class="block text-sm font-medium">Специальность</label>
       <select id="specialty" class="w-full border rounded px-3 py-2 mt-1">
-        <option value="">Выберите специальность</option>
+        <option value="">Выберите специальность...</option>
       </select>
     </div>
 
     <div>
       <label id="label-university" for="university" class="block text-sm font-medium">Университет</label>
       <select id="university" class="w-full border rounded px-3 py-2 mt-1">
-        <option value="">Выберите университет</option>
+        <option value="">Выберите университет...</option>
       </select>
     </div>
 
-    <button id="check-btn" onclick="checkChance()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">Узнать шансы</button>
+    <button id="check-btn" onclick="checkChance()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">
+      Узнать шансы
+    </button>
 
     <div id="result" class="text-center text-lg font-semibold mt-4"></div>
   </div>
 
   <script>
-    let lang = localStorage.getItem('lang') || 'ru';
+    let lang = 'ru';
 
     const translations = {
       ru: {
@@ -66,27 +69,22 @@
         specialty: 'Специальность',
         university: 'Университет',
         btn: 'Узнать шансы',
-        select: 'Выберите',
-        fillAll: 'Пожалуйста, заполните все поля',
-        chance: 'Ваш шанс: '
+        select: 'Выберите'
       },
       kz: {
-        title: 'Грант алу мүмкіндігі',
+        title: 'Грант мүмкіндігі',
         city: 'Қала',
         score: 'ҰБТ балы',
         combo: 'Пәндер комбинациясы',
         specialty: 'Мамандық',
         university: 'Университет',
-        btn: 'Мүмкіндікті тексеру',
-        select: 'Таңдаңыз',
-        fillAll: 'Барлық өрістерді толтырыңыз',
-        chance: 'Сіздің мүмкіндігіңіз: '
+        btn: 'Мүмкіндікті білу',
+        select: 'Таңдаңыз'
       }
     };
 
-    function setLanguage(selectedLang) {
-      lang = selectedLang;
-      localStorage.setItem('lang', lang);
+    function setLanguage(l) {
+      lang = l;
       updateLanguage();
     }
 
@@ -100,8 +98,8 @@
       document.getElementById('label-university').textContent = t.university;
       document.getElementById('check-btn').textContent = t.btn;
 
-      // Обновить placeholder и options
       document.getElementById('score').placeholder = lang === 'ru' ? 'Введите балл' : 'Балды енгізіңіз';
+
       document.querySelectorAll('select').forEach(select => {
         if (select.options.length > 0) {
           select.options[0].text = t.select + '...';
@@ -117,6 +115,7 @@
     async function populateSelect(id, endpoint) {
       const data = await fetchData(endpoint);
       const select = document.getElementById(id);
+      select.innerHTML = `<option value="">${translations[lang].select}...</option>`;
       data.forEach(item => {
         const option = document.createElement('option');
         option.value = item.id;
@@ -131,24 +130,27 @@
       const comboId = document.getElementById('combo').value;
       const specialtyId = document.getElementById('specialty').value;
       const universityId = document.getElementById('university').value;
-
+      
       if (!score || !comboId || !specialtyId || !universityId || !cityId) {
-        document.getElementById('result').textContent = translations[lang].fillAll;
+        document.getElementById('result').textContent = lang === 'ru' 
+          ? 'Пожалуйста, заполните все поля' 
+          : 'Барлық өрістерді толтырыңыз';
         return;
       }
 
       const res = await fetch('https://your-api-url/check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ score, comboId, specialtyId, universityId, cityId, lang })
+        body: JSON.stringify({ score, comboId, specialtyId, universityId, cityId })
       });
 
       const data = await res.json();
-      document.getElementById('result').textContent = translations[lang].chance + data.chance + '%';
+      document.getElementById('result').textContent = lang === 'ru'
+        ? `Ваш шанс: ${data.chance}%`
+        : `Сіздің мүмкіндігіңіз: ${data.chance}%`;
     }
 
     window.onload = async () => {
-      document.getElementById('language').value = lang;
       updateLanguage();
       await populateSelect('city', 'https://your-api-url/cities');
       await populateSelect('combo', 'https://your-api-url/combinations');
