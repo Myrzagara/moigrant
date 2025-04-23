@@ -22,6 +22,7 @@ func main() {
 	}
 	defer db.Close()
 
+	// 🔥 API endpoint — отдельно и ДО других обработчиков
 	http.HandleFunc("/cities", func(w http.ResponseWriter, r *http.Request) {
 		rows, err := db.Query("SELECT id, name FROM cities")
 		if err != nil {
@@ -43,6 +44,10 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(cities)
 	})
+
+	// Если у тебя есть HTML/JS/CSS-файлы — подгружаем их отсюда
+	fs := http.FileServer(http.Dir("public"))
+	http.Handle("/", fs) // ← это обработчик для HTML
 
 	log.Println("Сервер запущен на :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))

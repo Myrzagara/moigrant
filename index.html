@@ -152,7 +152,7 @@
 
     window.onload = async () => {
       updateLanguage();
-      await populateSelect('city', 'http://31.130.154.132:8080/cities');
+      await populateSelect('city', 'https://api.moigrant.kz/cities');
       await populateSelect('combo', 'https://your-api-url/combinations');
 
       document.getElementById('combo').addEventListener('change', async (e) => {
