@@ -7,164 +7,263 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-4">
-  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-6" id="app">
-    <!-- Выбор языка -->
-    <div class="flex justify-end space-x-2">
-      <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
-      <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
+  <div id="welcome-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4">
+    <div class="flex justify-between items-center">
+      <h1 id="title" class="text-xl font-bold">Шанс на грант</h1>
+      <div class="flex space-x-2">
+        <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
+        <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
+      </div>
     </div>
 
-    <!-- Шаг 1: Обложка -->
-    <div v-if="step === 1" class="space-y-4 text-center">
-      <h1 class="text-2xl font-bold text-gray-900 leading-tight">
-        {{ lang == 'ru' ? 'Узнай свои шансы на грант' : 'Грант алу мүмкіндігіңізді біліңіз' }}
-      </h1>
-      <p class="text-gray-600">
-        {{ lang == 'ru' ? 'Пройди короткий тест и узнай, куда реально поступить на грант' : 'Қысқа тесттен өтіп, қай ЖОО-ға грантқа түсе алатыныңды біл' }}
-      </p>
-      <button @click="step = 2" class="bg-orange-500 text-white text-lg px-6 py-3 rounded-full hover:bg-orange-600 transition">
-        {{ lang == 'ru' ? 'Пройти тест' : 'Тестті бастау' }} →
-      </button>
-      <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="students" class="w-40 mx-auto mt-4"/>
-    </div>
-
-    <!-- Шаг 2: Форма -->
-    <div v-if="step === 2" class="space-y-4">
-      <p class="text-gray-700 font-semibold">{{ lang == 'ru' ? 'Шаг 2 из 3' : '2-қадам 3-тен' }}</p>
-      <h2 class="text-xl font-bold">{{ lang == 'ru' ? 'Заполни анкету' : 'Анкетаны толтырыңыз' }}</h2>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700">
-          {{ lang == 'ru' ? 'Город' : 'Қала' }}
-        </label>
-        <select v-model="cityId" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-          <option disabled value="">{{ lang == 'ru' ? 'Выберите город' : 'Қаланы таңдаңыз' }}</option>
-          <option v-for="city in cities" :value="city.id">{{ city.name }}</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700">
-          {{ lang == 'ru' ? 'Баллы ЕНТ' : 'ҰБТ балы' }}
-        </label>
-        <input type="number" v-model="score" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700">
-          {{ lang == 'ru' ? 'Комбинация предметов' : 'Пән комбинациясы' }}
-        </label>
-        <select v-model="combinationId" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-          <option disabled value="">{{ lang == 'ru' ? 'Выберите комбинацию' : 'Комбинацияны таңдаңыз' }}</option>
-          <option v-for="combo in combinations" :value="combo.id">{{ combo.name }}</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700">
-          {{ lang == 'ru' ? 'Специальность' : 'Мамандық' }}
-        </label>
-        <select v-model="specialtyId" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-          <option disabled value="">{{ lang == 'ru' ? 'Выберите специальность' : 'Мамандықты таңдаңыз' }}</option>
-          <option v-for="spec in specialties" :value="spec.id">{{ spec.name }}</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700">
-          {{ lang == 'ru' ? 'Университет' : 'Университет' }}
-        </label>
-        <select v-model="universityId" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-          <option disabled value="">{{ lang == 'ru' ? 'Выберите вуз' : 'Университетті таңдаңыз' }}</option>
-          <option v-for="uni in universities" :value="uni.id">{{ uni.name }}</option>
-        </select>
-      </div>
-
-      <button @click="submit" class="bg-blue-600 text-white w-full py-3 rounded-lg mt-4 hover:bg-blue-700 transition">
-        {{ lang == 'ru' ? 'Узнать результат' : 'Нәтижені көру' }}
-      </button>
-    </div>
-
-    <!-- Шаг 3: Результат -->
-    <div v-if="step === 3" class="space-y-4">
-      <p class="text-gray-700 font-semibold">{{ lang == 'ru' ? 'Шаг 3 из 3' : '3-қадам 3-тен' }}</p>
-      <h2 class="text-xl font-bold">{{ lang == 'ru' ? 'Результаты' : 'Нәтиже' }}</h2>
-      
-      <div class="bg-gray-100 p-4 rounded-xl">
-        <p><strong>{{ lang == 'ru' ? 'Проходной балл:' : 'Өту балы:' }}</strong> {{ result.passScore }}</p>
-        <p><strong>{{ lang == 'ru' ? 'Ваш балл:' : 'Сіздің балыңыз:' }}</strong> {{ score }}</p>
-        <p><strong>{{ lang == 'ru' ? 'Шанс:' : 'Мүмкіндік:' }}</strong> {{ result.chance }}</p>
-        <!-- Дополнительные поля по желанию -->
-      </div>
-
-      <button @click="step = 1" class="mt-4 bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-        {{ lang == 'ru' ? 'Пройти снова' : 'Қайта өту' }}
+    <div class="text-center space-y-4">
+      <h2 class="text-2xl font-bold">Узнай свои шансы на грант в ВУЗ</h2>
+      <p>Заполни короткий опросник и узнай, куда реально поступить на грант с твоим ЕНТ баллом.</p>
+      <button onclick="goToForm()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">
+        Начать
       </button>
     </div>
   </div>
 
-  <!-- Vue.js + логика -->
-  <script src="https://unpkg.com/vue@3.4.15/dist/vue.global.prod.js"></script>
+  <div id="form-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4 hidden">
+    <div class="flex justify-between items-center">
+      <h1 id="form-title" class="text-xl font-bold">Шанс на грант</h1>
+      <div class="flex space-x-2">
+        <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
+        <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
+      </div>
+    </div>
+
+    <div>
+      <label id="label-city" for="city" class="block text-sm font-medium">Город</label>
+      <select id="city" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите город...</option>
+      </select>
+    </div>
+
+    <div>
+      <label id="label-score" for="score" class="block text-sm font-medium">ЕНТ балл</label>
+      <input id="score" type="number" class="w-full border rounded px-3 py-2 mt-1" placeholder="Введите балл">
+    </div>
+
+    <div>
+      <label id="label-combo" for="combo" class="block text-sm font-medium">Комбинация предметов</label>
+      <select id="combo" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите комбинацию...</option>
+      </select>
+    </div>
+
+    <div>
+      <label id="label-specialty" for="specialty" class="block text-sm font-medium">Специальность</label>
+      <select id="specialty" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите специальность...</option>
+      </select>
+    </div>
+
+    <div>
+      <label id="label-university" for="university" class="block text-sm font-medium">Университет</label>
+      <select id="university" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите университет...</option>
+      </select>
+    </div>
+
+    <button id="check-btn" onclick="checkChance()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">
+      Узнать шансы
+    </button>
+
+    <div id="result" class="text-left text-sm font-medium mt-4 whitespace-pre-line"></div>
+  </div>
+
   <script>
-    const { createApp } = Vue;
-    createApp({
-      data() {
-        return {
-          step: 1,
-          lang: 'ru',
-          cityId: '',
-          combinationId: '',
-          specialtyId: '',
-          universityId: '',
-          score: '',
-          result: {},
-          cities: [],
-          combinations: [],
-          specialties: [],
-          universities: []
-        }
+    let lang = 'ru';
+
+    const translations = {
+      ru: {
+        title: 'Шанс на грант',
+        city: 'Город',
+        score: 'ЕНТ балл',
+        combo: 'Комбинация предметов',
+        specialty: 'Специальность',
+        university: 'Университет',
+        btn: 'Узнать шансы',
+        select: 'Выберите',
+        scorePlaceholder: 'Введите балл',
+        statsTitle: '📊 Статистика:',
+        grants: 'Грантов',
+        minScore: 'Мин. балл',
+        maxScore: 'Макс. балл',
+        threshold: 'Порог',
+        coefficient: 'Коэффициент',
+        fillAll: 'Пожалуйста, заполните все поля',
+        invalidScore: 'ЕНТ балл должен быть числом от 0 до 140',
+        error: 'Ошибка при получении статистики',
+        percent: 'Вероятность'
       },
-      watch: {
-        combinationId() {
-          this.loadSpecialties();
-        },
-        specialtyId() {
-          this.loadUniversities();
-        }
-      },
-      methods: {
-        setLanguage(l) {
-          this.lang = l;
-        },
-        async loadInitial() {
-          const [cities, combinations] = await Promise.all([
-            fetch('https://api.moigrant.kz/cities').then(r => r.json()),
-            fetch('https://api.moigrant.kz/combinations').then(r => r.json())
-          ]);
-          this.cities = cities;
-          this.combinations = combinations;
-        },
-        async loadSpecialties() {
-          if (!this.combinationId) return;
-          const res = await fetch(`https://api.moigrant.kz/specialties?combination_id=${this.combinationId}`);
-          this.specialties = await res.json();
-        },
-        async loadUniversities() {
-          if (!this.specialtyId || !this.cityId) return;
-          const res = await fetch(`https://api.moigrant.kz/universities?specialty_id=${this.specialtyId}&city_id=${this.cityId}`);
-          this.universities = await res.json();
-        },
-        async submit() {
-          const url = `https://api.moigrant.kz/statistics?combination_id=${this.combinationId}&specialty_id=${this.specialtyId}&university_id=${this.universityId}&city_id=${this.cityId}&score=${this.score}`;
-          const res = await fetch(url);
-          this.result = await res.json();
-          this.step = 3;
-        }
-      },
-      mounted() {
-        this.loadInitial();
+      kz: {
+        title: 'Грант мүмкіндігі',
+        city: 'Қала',
+        score: 'ҰБТ балы',
+        combo: 'Пәндер комбинациясы',
+        specialty: 'Мамандық',
+        university: 'Университет',
+        btn: 'Мүмкіндікті білу',
+        select: 'Таңдаңыз',
+        scorePlaceholder: 'Балды енгізіңіз',
+        statsTitle: '📊 Статистика:',
+        grants: 'Грант саны',
+        minScore: 'Ең төмен балл',
+        maxScore: 'Ең жоғары балл',
+        threshold: 'Порог',
+        coefficient: 'Коэффициент',
+        fillAll: 'Барлық өрістерді толтырыңыз',
+        invalidScore: 'ҰБТ балы 0 мен 140 аралығында болуы керек',
+        error: 'Статистиканы алу кезінде қате',
+        percent: 'Мүмкіндік'
       }
-    }).mount('#app');
+    };
+
+    function setLanguage(l) {
+      lang = l;
+      updateLanguage();
+      updateSelects();
+    }
+
+    function updateLanguage() {
+      const t = translations[lang];
+      document.getElementById('title').textContent = t.title;
+      document.getElementById('label-city').textContent = t.city;
+      document.getElementById('label-score').textContent = t.score;
+      document.getElementById('label-combo').textContent = t.combo;
+      document.getElementById('label-specialty').textContent = t.specialty;
+      document.getElementById('label-university').textContent = t.university;
+      document.getElementById('check-btn').textContent = t.btn;
+      document.getElementById('score').placeholder = t.scorePlaceholder;
+
+      document.querySelectorAll('select').forEach(select => {
+        if (select.options.length > 0) {
+          select.options[0].text = t.select + '...';
+        }
+      });
+    }
+
+    async function fetchData(endpoint) {
+      try {
+        const res = await fetch(endpoint);
+        if (!res.ok) throw new Error('Network response was not ok');
+        return await res.json();
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+      }
+    }
+
+    async function populateSelect(id, endpoint, keyPrefix = 'name') {
+      const data = await fetchData(endpoint);
+      const select = document.getElementById(id);
+      if (!select) return;
+
+      const t = translations[lang];
+      select.innerHTML = `<option value="">${t.select}...</option>`;
+
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item[`${keyPrefix}_${lang}`] || item.name || item.id;
+        select.appendChild(option);
+      });
+    }
+
+    async function updateSelects() {
+      await populateSelect('city', 'https://api.moigrant.kz/cities', 'name');
+      await populateSelect('combo', 'https://api.moigrant.kz/combinations', 'name');
+      document.getElementById('specialty').innerHTML = `<option value="">${translations[lang].select}...</option>`;
+      document.getElementById('university').innerHTML = `<option value="">${translations[lang].select}...</option>`;
+    }
+
+    async function populateSpecialties() {
+      const comboId = document.getElementById('combo').value;
+      if (!comboId) return;
+
+      const endpoint = `https://api.moigrant.kz/programs?id_combination=${comboId}`;
+      const specialties = await fetchData(endpoint);
+
+      const specialtySelect = document.getElementById('specialty');
+      specialtySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
+
+      specialties.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = lang === 'ru' ? item.name_ru : item.name_kz;
+        specialtySelect.appendChild(option);
+      });
+    }
+
+    async function checkChance() {
+      const cityId = document.getElementById('city').value;
+      const score = document.getElementById('score').value;
+      const comboId = document.getElementById('combo').value;
+      const specialtyId = document.getElementById('specialty').value;
+      const universityId = document.getElementById('university').value;
+
+      const t = translations[lang];
+      const resultDiv = document.getElementById('result');
+
+      if (score < 0 || score > 140 || isNaN(score)) {
+        resultDiv.textContent = t.invalidScore;
+        return;
+      }
+
+      if (!score || !comboId || !specialtyId || !universityId || !cityId) {
+        resultDiv.textContent = t.fillAll;
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://api.moigrant.kz/statistics?id_programm=${specialtyId}&id_university=${universityId}&score=${score}`);
+        const data = await res.json();
+
+        resultDiv.innerHTML = `
+${t.statsTitle}
+${t.grants}: ${data.grants}
+${t.minScore}: ${data.min_score}
+${t.maxScore}: ${data.max_score}
+${t.threshold}: ${data.threshold}
+${t.coefficient}: ${data.coefficient}
+${t.percent}: ${data.percent}%
+        `.trim();
+
+      } catch (error) {
+        console.error('Error checking statistics:', error);
+        resultDiv.textContent = t.error;
+      }
+    }
+
+    function goToForm() {
+      document.getElementById('welcome-page').classList.add('hidden');
+      document.getElementById('form-page').classList.remove('hidden');
+    }
+
+    window.onload = async () => {
+      updateLanguage();
+      await updateSelects();
+
+      document.getElementById('combo').addEventListener('change', async () => {
+        await populateSpecialties();
+      });
+
+      document.getElementById('specialty').addEventListener('change', async (e) => {
+        const universitySelect = document.getElementById('university');
+        universitySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
+
+        const cityId = document.getElementById('city').value;
+        const specialtyId = e.target.value;
+
+        if (specialtyId && cityId) {
+          const endpoint = `https://api.moigrant.kz/universities?id_programm=${specialtyId}&id_city=${cityId}`;
+          await populateSelect('university', endpoint, 'name');
+        }
+      });
+    };
   </script>
 </body>
 </html>
