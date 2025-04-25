@@ -79,7 +79,8 @@
         coefficient: 'Коэффициент',
         fillAll: 'Пожалуйста, заполните все поля',
         invalidScore: 'ЕНТ балл должен быть числом от 0 до 140',
-        error: 'Ошибка при получении статистики'
+        error: 'Ошибка при получении статистики',
+        percent: 'Вероятность'
       },
       kz: {
         title: 'Грант мүмкіндігі',
@@ -99,7 +100,8 @@
         coefficient: 'Коэффициент',
         fillAll: 'Барлық өрістерді толтырыңыз',
         invalidScore: 'ҰБТ балы 0 мен 140 аралығында болуы керек',
-        error: 'Статистиканы алу кезінде қате'
+        error: 'Статистиканы алу кезінде қате',
+        percent: 'Мүмкіндік'
       }
     };
 
@@ -200,7 +202,7 @@
       }
 
       try {
-        const res = await fetch(`https://api.moigrant.kz/statistics?id_programm=${specialtyId}&id_university=${universityId}`);
+        const res = await fetch(`https://api.moigrant.kz/statistics?id_programm=${specialtyId}&id_university=${universityId}&score=${score}`);
         const data = await res.json();
 
         resultDiv.innerHTML = `
@@ -210,6 +212,7 @@ ${t.minScore}: ${data.min_score}
 ${t.maxScore}: ${data.max_score}
 ${t.threshold}: ${data.threshold}
 ${t.coefficient}: ${data.coefficient}
+${t.percent}: ${data.percent}%
         `.trim();
 
       } catch (error) {
