@@ -222,7 +222,7 @@
         const res = await fetch(`https://api.moigrant.kz/statistics?id_programm=${specialtyId}&id_university=${universityId}&score=${score}`);
         const data = await res.json();
 
-        resultDiv.innerHTML = `
+      /*  resultDiv.innerHTML = `
 ${t.statsTitle}
 ${t.grants}: ${data.grants}
 ${t.minScore}: ${data.min_score}
@@ -230,7 +230,52 @@ ${t.maxScore}: ${data.max_score}
 ${t.threshold}: ${data.threshold}
 ${t.coefficient}: ${data.coefficient}
 ${t.percent}: ${data.percent}%
-        `.trim();
+        `.trim();*/
+
+        resultDiv.innerHTML = `
+<div class="bg-white rounded-2xl shadow-md p-6 max-w-sm w-full">
+  <h1 class="text-2xl font-bold mb-2">${t.statsTitle}</h1>
+
+  <div class="flex items-baseline mb-6">
+    <div class="text-5xl font-bold mr-2">${data.percent}%</div>
+    <div class="text-xl text-gray-500">${t.percent}</div>
+  </div>
+
+  <div class="border-t border-gray-200 my-4"></div>
+
+  <div class="space-y-4">
+    <div class="flex justify-between text-base">
+      <span>${t.grants}</span>
+      <span class="font-bold">${data.grants}</span>
+    </div>
+    <div class="border-t border-gray-200"></div>
+
+    <div class="flex justify-between text-base">
+      <span>${t.minScore}</span>
+      <span class="font-bold">${data.min_score}</span>
+    </div>
+    <div class="border-t border-gray-200"></div>
+
+    <div class="flex justify-between text-base">
+      <span>${t.maxScore}</span>
+      <span class="font-bold">${data.max_score}</span>
+    </div>
+    <div class="border-t border-gray-200"></div>
+
+    <div class="flex justify-between text-base">
+      <span>${t.threshold}</span>
+      <span class="font-bold">${data.threshold}</span>
+    </div>
+    <div class="border-t border-gray-200"></div>
+
+    <div class="flex justify-between text-base">
+      <span>${t.coefficient}</span>
+      <span class="font-bold">${data.coefficient}</span>
+    </div>
+  </div>
+</div>
+`.trim();
+
 
       } catch (error) {
         console.error('Error checking statistics:', error);
