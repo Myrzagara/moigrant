@@ -196,7 +196,7 @@
         specialtySelect.appendChild(option);
       });
     }
-    async function checkChance() {
+ async function checkChance() {
   const cityId = document.getElementById('city').value;
   const score = document.getElementById('score').value;
   const comboId = document.getElementById('combo').value;
@@ -268,12 +268,7 @@
       </div>
     `.trim();
 
-    // Очистить поля формы
-    document.getElementById('city').value = '';
-    document.getElementById('score').value = '';
-    document.getElementById('combo').value = '';
-    document.getElementById('specialty').value = '';
-    document.getElementById('university').value = '';
+   
 
     // Извлекаем названия выбранных университета и специальности
     const universityName = document.getElementById('university').options[document.getElementById('university').selectedIndex]?.text || '';
@@ -294,7 +289,12 @@
         </div>
       `.trim();
     }
-
+ // Очистить поля формы
+ document.getElementById('city').value = '';
+    document.getElementById('score').value = '';
+    document.getElementById('combo').value = '';
+    document.getElementById('specialty').value = '';
+    document.getElementById('university').value = '';
   } catch (error) {
     console.error('Error checking statistics:', error);
     resultDiv.textContent = t.error;
