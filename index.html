@@ -225,46 +225,55 @@ const universityId = universitySelect.value;
     const data = await res.json();
 
     // Формируем результат
+
     resultDiv.innerHTML = `
-  <div class="bg-white rounded-2xl shadow-lg p-6 w-80 text-base">
-    <div class="flex items-baseline mb-4">
-      <div class="text-5xl font-bold mr-2">${data.percent}%</div>
-      <div class="text-xl text-gray-500">${t.percent}</div>
+  <div class="bg-white rounded-3xl shadow-md p-6 w-96 mx-auto text-gray-900 font-sans">
+    <div class="mb-4">
+      <div class="text-2xl font-bold mb-1">Шанс</div>
+      <div class="flex items-end space-x-2">
+        <div class="text-5xl font-extrabold">${data.percent}%</div>
+        <div class="text-xl text-gray-400">вероятность</div>
+      </div>
     </div>
 
-    <div class="border-t border-gray-200 my-4"></div>
-
-    <div class="space-y-4">
-      <div class="flex justify-between">
-        <span>${t.grants}</span>
-        <span class="font-semibold">${data.grants}</span>
+    <div class="divide-y divide-gray-200 text-lg">
+      <div class="flex justify-between py-2">
+        <span>Обладатели грантов в 2024</span>
+        <span class="font-semibold">${data.grants_2024}</span>
       </div>
-      <div class="flex justify-between">
-        <span>${t.minScore}</span>
+      <div class="flex justify-between py-2">
+        <span>Минимальный балл ЕНТ</span>
         <span class="font-semibold">${data.min_score}</span>
       </div>
-      <div class="flex justify-between">
-        <span>${t.maxScore}</span>
+      <div class="flex justify-between py-2">
+        <span>Максимальный балл ЕНТ</span>
         <span class="font-semibold">${data.max_score}</span>
       </div>
-      <div class="flex justify-between">
-        <span>${t.threshold}</span>
+      <div class="flex justify-between py-2">
+        <span>Пороговый балл</span>
         <span class="font-semibold">${data.threshold}</span>
       </div>
-      <div class="flex justify-between">
-        <span>${t.coefficient}</span>
+      <div class="flex justify-between py-2">
+        <span>Заявителей на 1 грант</span>
         <span class="font-semibold">${data.coefficient}</span>
       </div>
-    </div>
-
-    <div class="border-t border-gray-200 my-4"></div>
-
-    <div class="space-y-2 text-sm text-gray-700">
+      <div class="flex justify-between py-2">
+        <span>Выделено грантов в 2024</span>
+        <span class="font-semibold">${data.allocated_2024}</span>
+      </div>
+      <div class="flex justify-between py-2">
+        <span>Грантов в 2025</span>
+        <span class="font-semibold">${data.grants_2025}</span>
+      </div>
+       <div class="space-y-2 text-sm text-gray-700">
       <div><strong>${t.university}:</strong> ${data.university}</div>
       <div><strong>${t.specialty}:</strong> ${data.specialty}</div>
     </div>
+    </div>
   </div>
 `.trim();
+
+  
 
 
    
