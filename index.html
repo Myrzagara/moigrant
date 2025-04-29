@@ -206,20 +206,24 @@
   const t = translations[lang];
   const resultDiv = document.getElementById('result');
 
+  // Проверяем корректность введенного балла
   if (score < 0 || score > 140 || isNaN(score)) {
     resultDiv.textContent = t.invalidScore;
     return;
   }
 
+  // Проверяем, все ли поля заполнены
   if (!score || !comboId || !specialtyId || !universityId || !cityId) {
     resultDiv.textContent = t.fillAll;
     return;
   }
 
   try {
+    // Запрашиваем данные с API
     const res = await fetch(`https://api.moigrant.kz/statistics?id_programm=${specialtyId}&id_university=${universityId}&score=${score}`);
     const data = await res.json();
 
+    // Формируем результат
     resultDiv.innerHTML = `
       <div class="bg-white rounded-2xl shadow-md p-6 max-w-sm w-full">
         <h1 class="text-2xl font-bold mb-2">${t.statsTitle}</h1>
@@ -271,16 +275,22 @@
     document.getElementById('specialty').value = '';
     document.getElementById('university').value = '';
 
-    // Показать выбранный университет и специальность в результате
+    // Извлекаем названия выбранных университета и специальности
     const universityName = document.getElementById('university').options[document.getElementById('university').selectedIndex]?.text || '';
     const specialtyName = document.getElementById('specialty').options[document.getElementById('specialty').selectedIndex]?.text || '';
 
-    // Если университет и специальность выбраны, показываем их
+    // Показываем выбранный университет и специальность в результате
     if (universityName && specialtyName) {
       resultDiv.innerHTML += `
         <div class="mt-4">
           <strong>${t.university}:</strong> ${universityName}<br />
           <strong>${t.specialty}:</strong> ${specialtyName}
+        </div>
+      `.trim();
+    } else {
+      resultDiv.innerHTML += `
+        <div class="mt-4 text-red-500">
+          ${t.fillAll}
         </div>
       `.trim();
     }
