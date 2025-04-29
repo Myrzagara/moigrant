@@ -201,7 +201,8 @@
   const score = document.getElementById('score').value;
   const comboId = document.getElementById('combo').value;
   const specialtyId = document.getElementById('specialty').value;
-  const universityId = document.getElementById('university').value;
+  const universitySelect = document.getElementById('university');
+const universityId = universitySelect.value;
 
   const t = translations[lang];
   const resultDiv = document.getElementById('result');
@@ -271,7 +272,8 @@
    
 
     // Извлекаем названия выбранных университета и специальности
-    const universityName = document.getElementById('university').options[document.getElementById('university').selectedIndex]?.text || '';
+   // const universityName = document.getElementById('university').options[document.getElementById('university').selectedIndex]?.text || '';
+    const universityName = universitySelect.options[universitySelect.selectedIndex].text;
     const specialtyName = document.getElementById('specialty').options[document.getElementById('specialty').selectedIndex]?.text || '';
 
     // Показываем выбранный университет и специальность в результате
