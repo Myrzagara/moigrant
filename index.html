@@ -77,7 +77,7 @@
   <!-- Третья страница - Результаты -->
   <div id="result-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4 hidden">
     <div class="flex justify-between items-center">
-      <h1 id="result-title" class="text-xl font-bold">Результаты</h1>
+      <h1 id="form-title" class="text-xl font-bold">Шанс на грант</h1>
       <div class="flex space-x-2">
         <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
         <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
@@ -92,9 +92,7 @@
       Вернуться назад
     </button>
     
-    <button onclick="goToWelcome()" class="w-full bg-blue-500 text-white py-2 rounded">
-      На главную
-    </button>
+   
   </div>
 
   <script>
@@ -177,9 +175,8 @@
       document.getElementById('score').placeholder = t.scorePlaceholder;
   
       const backBtn = document.querySelector('#result-page button:nth-of-type(1)');
-      const homeBtn = document.querySelector('#result-page button:nth-of-type(2)');
+    
       if (backBtn) backBtn.textContent = t.backBtn;
-      if (homeBtn) homeBtn.textContent = t.homeBtn;
   
       document.querySelectorAll('select').forEach(select => {
         if (select.options.length > 0) {
