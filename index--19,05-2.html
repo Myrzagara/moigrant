@@ -18,9 +18,9 @@
     </div>
 
     <div class="text-center space-y-4">
-      <h2 id="welcome-title" class="text-2xl font-bold">Узнай свои шансы на грант в ВУЗ</h2>
-      <p id="welcome-text">Заполни короткий опросник и узнай, куда реально поступить на грант с твоим ЕНТ баллом.</p>
-      <button onclick="goToForm()" class="w-full bg-blue-500 text-white py-2 rounded mt-4" id="start-btn">
+      <h2 class="text-2xl font-bold">Узнай свои шансы на грант в ВУЗ</h2>
+      <p>Заполни короткий опросник и узнай, куда реально поступить на грант с твоим ЕНТ баллом.</p>
+      <button onclick="goToForm()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">
         Начать
       </button>
     </div>
@@ -77,7 +77,7 @@
   <!-- Третья страница - Результаты -->
   <div id="result-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4 hidden">
     <div class="flex justify-between items-center">
-      <h1 id="result-title" class="text-xl font-bold">Результаты</h1>
+      <h1 id="form-title" class="text-xl font-bold">Шанс на грант</h1>
       <div class="flex space-x-2">
         <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
         <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
@@ -88,20 +88,20 @@
       <!-- Здесь будет отображаться результат -->
     </div>
 
-    <button onclick="goBackToForm()" class="w-full bg-blue-500 text-white py-2 rounded">
-      <span id="back-btn-text">Вернуться назад</span>
+    <button onclick="goBackToForm()" class="w-full bg-gray-500 text-white py-2 rounded mt-4">
+      Вернуться назад
     </button>
+    
+   
   </div>
 
   <script>
     let lang = 'ru';
+    let lastSelectedValues = {};
   
     const translations = {
       ru: {
         title: 'Шанс на грант',
-        welcomeTitle: 'Узнай свои шансы на грант в ВУЗ',
-        welcomeText: 'Заполни короткий опросник и узнай, куда реально поступить на грант с твоим ЕНТ баллом.',
-        startBtn: 'Начать',
         city: 'Город',
         score: 'ЕНТ балл',
         combo: 'Комбинация предметов',
@@ -122,17 +122,12 @@
         percent: 'Вероятность',
         resultTitle: 'Результаты',
         backBtn: 'Вернуться назад',
+        homeBtn: 'На главную',
         universityLabel: 'Университет',
-        specialtyLabel: 'Специальность',
-        applicants: 'Заявителей на 1 грант',
-        allocated: 'Выделено грантов в 2024',
-        nextYear: 'Грантов в 2025'
+        specialtyLabel: 'Специальность'
       },
       kz: {
         title: 'Грант мүмкіндігі',
-        welcomeTitle: 'ЖОО-да грантқа түсу мүмкіндігін біліңіз',
-        welcomeText: 'Қысқа сауалнаманы толтырыңыз және ҰБТ баллыңызбен грантқа қай жерге түсе алатыныңызды біліңіз.',
-        startBtn: 'Бастау',
         city: 'Қала',
         score: 'ҰБТ балы',
         combo: 'Пәндер комбинациясы',
@@ -153,11 +148,9 @@
         percent: 'Мүмкіндік',
         resultTitle: 'Нәтижелер',
         backBtn: 'Артқа қайту',
+        homeBtn: 'Басты бетке',
         universityLabel: 'Университет',
-        specialtyLabel: 'Мамандық',
-        applicants: '1 грантқа арызданушылар',
-        allocated: '2024 жылы бөлінген гранттар',
-        nextYear: '2025 жылғы гранттар'
+        specialtyLabel: 'Мамандық'
       }
     };
   
@@ -169,15 +162,10 @@
   
     function updateLanguage() {
       const t = translations[lang];
-      
-      // Обновляем первую страницу
       document.getElementById('title').textContent = t.title;
-      document.getElementById('welcome-title').textContent = t.welcomeTitle;
-      document.getElementById('welcome-text').textContent = t.welcomeText;
-      document.getElementById('start-btn').textContent = t.startBtn;
-      
-      // Обновляем вторую страницу
       document.getElementById('form-title').textContent = t.title;
+      document.getElementById('result-title').textContent = t.resultTitle;
+      
       document.getElementById('label-city').textContent = t.city;
       document.getElementById('label-score').textContent = t.score;
       document.getElementById('label-combo').textContent = t.combo;
@@ -185,12 +173,11 @@
       document.getElementById('label-university').textContent = t.university;
       document.getElementById('check-btn').textContent = t.btn;
       document.getElementById('score').placeholder = t.scorePlaceholder;
-      
-      // Обновляем третью страницу
-      document.getElementById('result-title').textContent = t.resultTitle;
-      document.getElementById('back-btn-text').textContent = t.backBtn;
   
-      // Обновляем выпадающие списки
+      const backBtn = document.querySelector('#result-page button:nth-of-type(1)');
+    
+      if (backBtn) backBtn.textContent = t.backBtn;
+  
       document.querySelectorAll('select').forEach(select => {
         if (select.options.length > 0) {
           select.options[0].text = t.select + '...';
@@ -251,36 +238,45 @@
     }
     
     async function checkChance() {
-      const cityId = document.getElementById('city').value;
-      const score = document.getElementById('score').value;
-      const comboId = document.getElementById('combo').value;
-      const specialtyId = document.getElementById('specialty').value;
-      const universityId = document.getElementById('university').value;
-      const universityName = document.getElementById('university').options[document.getElementById('university').selectedIndex]?.text || '';
-      const specialtyName = document.getElementById('specialty').options[document.getElementById('specialty').selectedIndex]?.text || '';
-
+      // Сохраняем выбранные значения
+      lastSelectedValues = {
+        city: document.getElementById('city').value,
+        score: document.getElementById('score').value,
+        combo: document.getElementById('combo').value,
+        specialty: document.getElementById('specialty').value,
+        university: document.getElementById('university').value,
+        universityName: document.getElementById('university').options[document.getElementById('university').selectedIndex]?.text || '',
+        specialtyName: document.getElementById('specialty').options[document.getElementById('specialty').selectedIndex]?.text || ''
+      };
+      
+      const cityId = lastSelectedValues.city;
+      const score = lastSelectedValues.score;
+      const comboId = lastSelectedValues.combo;
+      const specialtyId = lastSelectedValues.specialty;
+      const universityId = lastSelectedValues.university;
+  
       const t = translations[lang];
       const resultDiv = document.getElementById('result-content');
-
+  
       // Проверяем корректность введенного балла
       if (score < 0 || score > 140 || isNaN(score)) {
         resultDiv.innerHTML = `<div class="text-red-500">${t.invalidScore}</div>`;
         showResultPage();
         return;
       }
-
+  
       // Проверяем, все ли поля заполнены
       if (!score || !comboId || !specialtyId || !universityId || !cityId) {
         resultDiv.innerHTML = `<div class="text-red-500">${t.fillAll}</div>`;
         showResultPage();
         return;
       }
-
+  
       try {
         // Запрашиваем данные с API
         const res = await fetch(`https://api.moigrant.kz/statistics?id_programm=${specialtyId}&id_university=${universityId}&score=${score}`);
         const data = await res.json();
-
+  
         // Формируем результат
         resultDiv.innerHTML = `
           <div class="bg-gray-50 rounded-xl p-4">
@@ -290,7 +286,7 @@
                 <div class="text-5xl font-extrabold">${data.percent}%</div>
               </div>
             </div>
-
+  
             <div class="divide-y divide-gray-200 text-sm">
               <div class="flex justify-between py-2">
                 <span>${t.grants}:</span>
@@ -312,23 +308,11 @@
                 <span>${t.coefficient}:</span>
                 <span class="font-semibold">${data.coefficient}</span>
               </div>
-              <div class="flex justify-between py-2">
-                <span>${t.applicants}:</span>
-                <span class="font-semibold">${data.coefficient}</span>
-              </div>
-              <div class="flex justify-between py-2">
-                <span>${t.allocated}:</span>
-                <span class="font-semibold">${data.allocated_2024}</span>
-              </div>
-              <div class="flex justify-between py-2">
-                <span>${t.nextYear}:</span>
-                <span class="font-semibold">${data.grants_2025}</span>
-              </div>
             </div>
-
+  
             <div class="mt-4 pt-4 border-t border-gray-200">
-              <div><strong>${t.universityLabel}:</strong> ${universityName}</div>
-              <div><strong>${t.specialtyLabel}:</strong> ${specialtyName}</div>
+              <div><strong>${t.universityLabel}:</strong> ${lastSelectedValues.universityName}</div>
+              <div><strong>${t.specialtyLabel}:</strong> ${lastSelectedValues.specialtyName}</div>
             </div>
           </div>
         `;
@@ -349,6 +333,20 @@
     function goBackToForm() {
       document.getElementById('result-page').classList.add('hidden');
       document.getElementById('form-page').classList.remove('hidden');
+      
+      // Восстанавливаем выбранные значения
+      if (lastSelectedValues) {
+        document.getElementById('city').value = lastSelectedValues.city;
+        document.getElementById('score').value = lastSelectedValues.score;
+        document.getElementById('combo').value = lastSelectedValues.combo;
+        document.getElementById('specialty').value = lastSelectedValues.specialty;
+        document.getElementById('university').value = lastSelectedValues.university;
+      }
+    }
+    
+    function goToWelcome() {
+      document.getElementById('result-page').classList.add('hidden');
+      document.getElementById('welcome-page').classList.remove('hidden');
       
       // Очищаем форму
       document.getElementById('city').value = '';
