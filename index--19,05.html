@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Шанс на грант</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+  <div id="welcome-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4">
+    <div class="flex justify-between items-center">
+      <h1 id="title" class="text-xl font-bold">Шанс на грант</h1>
+      <div class="flex space-x-2">
+        <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
+        <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
+      </div>
+    </div>
+
+    <div class="text-center space-y-4">
+      <h2 class="text-2xl font-bold">Узнай свои шансы на грант в ВУЗ</h2>
+      <p>Заполни короткий опросник и узнай, куда реально поступить на грант с твоим ЕНТ баллом.</p>
+      <button onclick="goToForm()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">
+        Начать
+      </button>
+    </div>
+  </div>
+
+  <div id="form-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4 hidden">
+    <div class="flex justify-between items-center">
+      <h1 id="form-title" class="text-xl font-bold">Шанс на грант</h1>
+      <div class="flex space-x-2">
+        <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
+        <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
+      </div>
+    </div>
+
+    <div>
+      <label id="label-city" for="city" class="block text-sm font-medium">Город</label>
+      <select id="city" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите город...</option>
+      </select>
+    </div>
+
+    <div>
+      <label id="label-score" for="score" class="block text-sm font-medium">ЕНТ балл</label>
+      <input id="score" type="number" class="w-full border rounded px-3 py-2 mt-1" placeholder="Введите балл">
+    </div>
+
+    <div>
+      <label id="label-combo" for="combo" class="block text-sm font-medium">Комбинация предметов</label>
+      <select id="combo" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите комбинацию...</option>
+      </select>
+    </div>
+
+    <div>
+      <label id="label-specialty" for="specialty" class="block text-sm font-medium">Специальность</label>
+      <select id="specialty" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите специальность...</option>
+      </select>
+    </div>
+
+    <div>
+      <label id="label-university" for="university" class="block text-sm font-medium">Университет</label>
+      <select id="university" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">Выберите университет...</option>
+      </select>
+    </div>
+
+    <button id="check-btn" onclick="checkChance()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">
+      Узнать шансы
+    </button>
+
+    <div id="result" class="text-left text-sm font-medium mt-4 whitespace-pre-line"></div>
+  </div>
+  <script>
+    let lang = 'ru';
+  
+    const translations = {
+      ru: {
+        title: 'Шанс на грант',
+        city: 'Город',
+        score: 'ЕНТ балл',
+        combo: 'Комбинация предметов',
+        specialty: 'Специальность',
+        university: 'Университет',
+        btn: 'Узнать шансы',
+        select: 'Выберите',
+        scorePlaceholder: 'Введите балл',
+        statsTitle: '📊 Статистика:',
+        grants: 'Грантов',
+        minScore: 'Мин. балл',
+        maxScore: 'Макс. балл',
+        threshold: 'Порог',
+        coefficient: 'Коэффициент',
+        fillAll: 'Пожалуйста, заполните все поля',
+        invalidScore: 'ЕНТ балл должен быть числом от 0 до 140',
+        error: 'Ошибка при получении статистики',
+        percent: 'Вероятность'
+      },
+      kz: {
+        title: 'Грант мүмкіндігі',
+        city: 'Қала',
+        score: 'ҰБТ балы',
+        combo: 'Пәндер комбинациясы',
+        specialty: 'Мамандық',
+        university: 'Университет',
+        btn: 'Мүмкіндікті білу',
+        select: 'Таңдаңыз',
+        scorePlaceholder: 'Балды енгізіңіз',
+        statsTitle: '📊 Статистика:',
+        grants: 'Грант саны',
+        minScore: 'Ең төмен балл',
+        maxScore: 'Ең жоғары балл',
+        threshold: 'Порог',
+        coefficient: 'Коэффициент',
+        fillAll: 'Барлық өрістерді толтырыңыз',
+        invalidScore: 'ҰБТ балы 0 мен 140 аралығында болуы керек',
+        error: 'Статистиканы алу кезінде қате',
+        percent: 'Мүмкіндік'
+      }
+    };
+  
+    function setLanguage(l) {
+      lang = l;
+      updateLanguage();
+      updateSelects();
+    }
+  
+    function updateLanguage() {
+      const t = translations[lang];
+      document.getElementById('title').textContent = t.title;
+      document.getElementById('label-city').textContent = t.city;
+      document.getElementById('label-score').textContent = t.score;
+      document.getElementById('label-combo').textContent = t.combo;
+      document.getElementById('label-specialty').textContent = t.specialty;
+      document.getElementById('label-university').textContent = t.university;
+      document.getElementById('check-btn').textContent = t.btn;
+      document.getElementById('score').placeholder = t.scorePlaceholder;
+  
+      document.querySelectorAll('select').forEach(select => {
+        if (select.options.length > 0) {
+          select.options[0].text = t.select + '...';
+        }
+      });
+    }
+  
+    async function fetchData(endpoint) {
+      try {
+        const res = await fetch(endpoint);
+        if (!res.ok) throw new Error('Network response was not ok');
+        return await res.json();
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+      }
+    }
+  
+    async function populateSelect(id, endpoint, keyPrefix = 'name') {
+      const data = await fetchData(endpoint);
+      const select = document.getElementById(id);
+      if (!select) return;
+  
+      const t = translations[lang];
+      select.innerHTML = `<option value="">${t.select}...</option>`;
+  
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item[`${keyPrefix}_${lang}`] || item.name || item.id;
+        select.appendChild(option);
+      });
+    }
+  
+    async function updateSelects() {
+      await populateSelect('city', 'https://api.moigrant.kz/cities', 'name');
+      await populateSelect('combo', 'https://api.moigrant.kz/combinations', 'name');
+      document.getElementById('specialty').innerHTML = `<option value="">${translations[lang].select}...</option>`;
+      document.getElementById('university').innerHTML = `<option value="">${translations[lang].select}...</option>`;
+    }
+  
+    async function populateSpecialties() {
+      const comboId = document.getElementById('combo').value;
+      if (!comboId) return;
+  
+      const endpoint = `https://api.moigrant.kz/programs?id_combination=${comboId}`;
+      const specialties = await fetchData(endpoint);
+  
+      const specialtySelect = document.getElementById('specialty');
+      specialtySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
+  
+      specialties.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = lang === 'ru' ? item.name_ru : item.name_kz;
+        specialtySelect.appendChild(option);
+      });
+    }
+ async function checkChance() {
+  const cityId = document.getElementById('city').value;
+  const score = document.getElementById('score').value;
+  const comboId = document.getElementById('combo').value;
+  const specialtyId = document.getElementById('specialty').value;
+  const universitySelect = document.getElementById('university');
+const universityId = universitySelect.value;
+
+  const t = translations[lang];
+  const resultDiv = document.getElementById('result');
+
+  // Проверяем корректность введенного балла
+  if (score < 0 || score > 140 || isNaN(score)) {
+    resultDiv.textContent = t.invalidScore;
+    return;
+  }
+
+  // Проверяем, все ли поля заполнены
+  if (!score || !comboId || !specialtyId || !universityId || !cityId) {
+    resultDiv.textContent = t.fillAll;
+    return;
+  }
+
+  try {
+    // Запрашиваем данные с API
+    const res = await fetch(`https://api.moigrant.kz/statistics?id_programm=${specialtyId}&id_university=${universityId}&score=${score}`);
+    const data = await res.json();
+
+    // Формируем результат
+
+    resultDiv.innerHTML = `
+  <div class="bg-white rounded-3xl shadow-md p-6 w-96 mx-auto text-gray-900 font-sans">
+    <div class="mb-4">
+      <div class="text-2xl font-bold mb-1">Шанс</div>
+      <div class="flex items-end space-x-2">
+        <div class="text-5xl font-extrabold">${data.percent}%</div>
+        <div class="text-xl text-gray-400">вероятность</div>
+      </div>
+    </div>
+
+    <div class="divide-y divide-gray-200 text-lg">
+      <div class="flex justify-between py-2">
+        <span>Обладатели грантов в 2024</span>
+        <span class="font-semibold">${data.grants}</span>
+      </div>
+      <div class="flex justify-between py-2">
+        <span>Минимальный балл ЕНТ</span>
+        <span class="font-semibold">${data.min_score}</span>
+      </div>
+      <div class="flex justify-between py-2">
+        <span>Максимальный балл ЕНТ</span>
+        <span class="font-semibold">${data.max_score}</span>
+      </div>
+      <div class="flex justify-between py-2">
+        <span>Пороговый балл</span>
+        <span class="font-semibold">${data.threshold}</span>
+      </div>
+      <div class="flex justify-between py-2">
+        <span>Заявителей на 1 грант</span>
+        <span class="font-semibold">${data.coefficient}</span>
+      </div>
+      <div class="flex justify-between py-2">
+        <span>Выделено грантов в 2024</span>
+        <span class="font-semibold">${data.allocated_2024}</span>
+      </div>
+      <div class="flex justify-between py-2">
+        <span>Грантов в 2025</span>
+        <span class="font-semibold">${data.grants_2025}</span>
+      </div>
+     
+    </div>
+  </div>
+`.trim();
+
+  
+
+
+   
+
+    // Извлекаем названия выбранных университета и специальности
+   // const universityName = document.getElementById('university').options[document.getElementById('university').selectedIndex]?.text || '';
+    const universityName = universitySelect.options[universitySelect.selectedIndex].text;
+    const specialtyName = document.getElementById('specialty').options[document.getElementById('specialty').selectedIndex]?.text || '';
+
+    // Показываем выбранный университет и специальность в результате
+    if (universityName && specialtyName) {
+      resultDiv.innerHTML += `
+        <div class="mt-4">
+          <strong>${t.university}:</strong> ${universityName}<br />
+          <strong>${t.specialty}:</strong> ${specialtyName}
+        </div>
+      `.trim();
+    } else {
+      resultDiv.innerHTML += `
+        <div class="mt-4 text-red-500">
+          ${t.fillAll}
+        </div>
+      `.trim();
+    }
+ // Очистить поля формы
+ document.getElementById('city').value = '';
+    document.getElementById('score').value = '';
+    document.getElementById('combo').value = '';
+    document.getElementById('specialty').value = '';
+    document.getElementById('university').value = '';
+  } catch (error) {
+    console.error('Error checking statistics:', error);
+    resultDiv.textContent = t.error;
+  }
+}
+
+   
+    function goToForm() {
+      document.getElementById('welcome-page').classList.add('hidden');
+      document.getElementById('form-page').classList.remove('hidden');
+    }
+  
+    window.onload = async () => {
+      updateLanguage();
+      await updateSelects();
+  
+      document.getElementById('combo').addEventListener('change', async () => {
+        await populateSpecialties();
+      });
+  
+      document.getElementById('specialty').addEventListener('change', async (e) => {
+        const universitySelect = document.getElementById('university');
+        universitySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
+  
+        const cityId = document.getElementById('city').value;
+        const specialtyId = e.target.value;
+  
+        if (specialtyId && cityId) {
+          const endpoint = `https://api.moigrant.kz/universities?id_programm=${specialtyId}&id_city=${cityId}`;
+          await populateSelect('university', endpoint, 'name');
+        }
+      });
+    };
+  </script>
+  
+<!--
+  <script>
+    let lang = 'ru';
+
+    const translations = {
+      ru: {
+        title: 'Шанс на грант',
+        city: 'Город',
+        score: 'ЕНТ балл',
+        combo: 'Комбинация предметов',
+        specialty: 'Специальность',
+        university: 'Университет',
+        btn: 'Узнать шансы',
+        select: 'Выберите',
+        scorePlaceholder: 'Введите балл',
+        statsTitle: '📊 Статистика:',
+        grants: 'Грантов',
+        minScore: 'Мин. балл',
+        maxScore: 'Макс. балл',
+        threshold: 'Порог',
+        coefficient: 'Коэффициент',
+        fillAll: 'Пожалуйста, заполните все поля',
+        invalidScore: 'ЕНТ балл должен быть числом от 0 до 140',
+        error: 'Ошибка при получении статистики',
+        percent: 'Вероятность'
+      },
+      kz: {
+        title: 'Грант мүмкіндігі',
+        city: 'Қала',
+        score: 'ҰБТ балы',
+        combo: 'Пәндер комбинациясы',
+        specialty: 'Мамандық',
+        university: 'Университет',
+        btn: 'Мүмкіндікті білу',
+        select: 'Таңдаңыз',
+        scorePlaceholder: 'Балды енгізіңіз',
+        statsTitle: '📊 Статистика:',
+        grants: 'Грант саны',
+        minScore: 'Ең төмен балл',
+        maxScore: 'Ең жоғары балл',
+        threshold: 'Порог',
+        coefficient: 'Коэффициент',
+        fillAll: 'Барлық өрістерді толтырыңыз',
+        invalidScore: 'ҰБТ балы 0 мен 140 аралығында болуы керек',
+        error: 'Статистиканы алу кезінде қате',
+        percent: 'Мүмкіндік'
+      }
+    };
+
+    function setLanguage(l) {
+      lang = l;
+      updateLanguage();
+      updateSelects();
+    }
+
+    function updateLanguage() {
+      const t = translations[lang];
+      document.getElementById('title').textContent = t.title;
+      document.getElementById('label-city').textContent = t.city;
+      document.getElementById('label-score').textContent = t.score;
+      document.getElementById('label-combo').textContent = t.combo;
+      document.getElementById('label-specialty').textContent = t.specialty;
+      document.getElementById('label-university').textContent = t.university;
+      document.getElementById('check-btn').textContent = t.btn;
+      document.getElementById('score').placeholder = t.scorePlaceholder;
+
+      document.querySelectorAll('select').forEach(select => {
+        if (select.options.length > 0) {
+          select.options[0].text = t.select + '...';
+        }
+      });
+    }
+
+    async function fetchData(endpoint) {
+      try {
+        const res = await fetch(endpoint);
+        if (!res.ok) throw new Error('Network response was not ok');
+        return await res.json();
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+      }
+    }
+
+    async function populateSelect(id, endpoint, keyPrefix = 'name') {
+      const data = await fetchData(endpoint);
+      const select = document.getElementById(id);
+      if (!select) return;
+
+      const t = translations[lang];
+      select.innerHTML = `<option value="">${t.select}...</option>`;
+
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item[`${keyPrefix}_${lang}`] || item.name || item.id;
+        select.appendChild(option);
+      });
+    }
+
+    async function updateSelects() {
+      await populateSelect('city', 'https://api.moigrant.kz/cities', 'name');
+      await populateSelect('combo', 'https://api.moigrant.kz/combinations', 'name');
+      document.getElementById('specialty').innerHTML = `<option value="">${translations[lang].select}...</option>`;
+      document.getElementById('university').innerHTML = `<option value="">${translations[lang].select}...</option>`;
+    }
+
+    async function populateSpecialties() {
+      const comboId = document.getElementById('combo').value;
+      if (!comboId) return;
+
+      const endpoint = `https://api.moigrant.kz/programs?id_combination=${comboId}`;
+      const specialties = await fetchData(endpoint);
+
+      const specialtySelect = document.getElementById('specialty');
+      specialtySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
+
+      specialties.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = lang === 'ru' ? item.name_ru : item.name_kz;
+        specialtySelect.appendChild(option);
+      });
+    }
+
+    async function checkChance() {
+      const cityId = document.getElementById('city').value;
+      const score = document.getElementById('score').value;
+      const comboId = document.getElementById('combo').value;
+      const specialtyId = document.getElementById('specialty').value;
+      const universityId = document.getElementById('university').value;
+
+      const t = translations[lang];
+      const resultDiv = document.getElementById('result');
+
+      if (score < 0 || score > 140 || isNaN(score)) {
+        resultDiv.textContent = t.invalidScore;
+        return;
+      }
+
+      if (!score || !comboId || !specialtyId || !universityId || !cityId) {
+        resultDiv.textContent = t.fillAll;
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://api.moigrant.kz/statistics?id_programm=${specialtyId}&id_university=${universityId}&score=${score}`);
+        const data = await res.json();
+
+      /*  resultDiv.innerHTML = `
+${t.statsTitle}
+${t.grants}: ${data.grants}
+${t.minScore}: ${data.min_score}
+${t.maxScore}: ${data.max_score}
+${t.threshold}: ${data.threshold}
+${t.coefficient}: ${data.coefficient}
+${t.percent}: ${data.percent}%
+        `.trim();*/
+
+        resultDiv.innerHTML = `
+<div class="bg-white rounded-2xl shadow-md p-6 max-w-sm w-full">
+  <h1 class="text-2xl font-bold mb-2">${t.statsTitle}</h1>
+
+  <div class="flex items-baseline mb-6">
+    <div class="text-5xl font-bold mr-2">${data.percent}%</div>
+    <div class="text-xl text-gray-500">${t.percent}</div>
+  </div>
+
+  <div class="border-t border-gray-200 my-4"></div>
+
+  <div class="space-y-4">
+    <div class="flex justify-between text-base">
+      <span>${t.grants}</span>
+      <span class="font-bold">${data.grants}</span>
+    </div>
+    <div class="border-t border-gray-200"></div>
+
+    <div class="flex justify-between text-base">
+      <span>${t.minScore}</span>
+      <span class="font-bold">${data.min_score}</span>
+    </div>
+    <div class="border-t border-gray-200"></div>
+
+    <div class="flex justify-between text-base">
+      <span>${t.maxScore}</span>
+      <span class="font-bold">${data.max_score}</span>
+    </div>
+    <div class="border-t border-gray-200"></div>
+
+    <div class="flex justify-between text-base">
+      <span>${t.threshold}</span>
+      <span class="font-bold">${data.threshold}</span>
+    </div>
+    <div class="border-t border-gray-200"></div>
+
+    <div class="flex justify-between text-base">
+      <span>${t.coefficient}</span>
+      <span class="font-bold">${data.coefficient}</span>
+    </div>
+  </div>
+</div>
+`.trim();
+
+
+      } catch (error) {
+        console.error('Error checking statistics:', error);
+        resultDiv.textContent = t.error;
+      }
+    }
+
+    function goToForm() {
+      document.getElementById('welcome-page').classList.add('hidden');
+      document.getElementById('form-page').classList.remove('hidden');
+    }
+
+    window.onload = async () => {
+      updateLanguage();
+      await updateSelects();
+
+      document.getElementById('combo').addEventListener('change', async () => {
+        await populateSpecialties();
+      });
+
+      document.getElementById('specialty').addEventListener('change', async (e) => {
+        const universitySelect = document.getElementById('university');
+        universitySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
+
+        const cityId = document.getElementById('city').value;
+        const specialtyId = e.target.value;
+
+        if (specialtyId && cityId) {
+          const endpoint = `https://api.moigrant.kz/universities?id_programm=${specialtyId}&id_city=${cityId}`;
+          await populateSelect('university', endpoint, 'name');
+        }
+      });
+    };
+  </script>-->
+</body>
+</html>
