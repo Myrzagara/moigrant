@@ -126,7 +126,7 @@
         specialtyLabel: 'Специальность',
         applicants: 'Заявителей на 1 грант',
         allocated: 'Выделено грантов в 2024',
-        nextYear: 'Грантов в 2025'
+        nextYear: 'Выделено грантов в 2025'
       },
       kz: {
         title: 'Грант мүмкіндігі',
@@ -157,7 +157,7 @@
         specialtyLabel: 'Мамандық',
         applicants: '1 грантқа арызданушылар',
         allocated: '2024 жылы бөлінген гранттар',
-        nextYear: '2025 жылғы гранттар'
+        nextYear: '2025 жылға бөлінген гранттар'
       }
     };
   
@@ -292,6 +292,10 @@
             </div>
 
             <div class="divide-y divide-gray-200 text-sm">
+               <div class="flex justify-between py-2">
+                <span>${t.score}:</span>
+                <span class="font-semibold">${score}</span>
+              </div>
               <div class="flex justify-between py-2">
                 <span>${t.grants}:</span>
                 <span class="font-semibold">${data.grants}</span>
@@ -312,17 +316,14 @@
                 <span>${t.coefficient}:</span>
                 <span class="font-semibold">${data.coefficient}</span>
               </div>
-              <div class="flex justify-between py-2">
-                <span>${t.applicants}:</span>
-                <span class="font-semibold">${data.coefficient}</span>
-              </div>
+            
               <div class="flex justify-between py-2">
                 <span>${t.allocated}:</span>
-                <span class="font-semibold">${data.allocated_2024}</span>
+                <span class="font-semibold">${data.count2024}</span>
               </div>
               <div class="flex justify-between py-2">
                 <span>${t.nextYear}:</span>
-                <span class="font-semibold">${data.grants_2025}</span>
+                <span class="font-semibold">${data.count2025}</span>
               </div>
             </div>
 
