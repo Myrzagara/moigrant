@@ -3,19 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Шанс на грант</title>
+  <title>moigrant</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-4">
   <!-- Первая страница - Приветствие -->
   <div id="welcome-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4">
     <div class="flex justify-between items-center">
-      <h1 id="title" class="text-xl font-bold">Шанс на грант
-        <a href="https://instagram.com/moigrant" target="_blank" rel="noopener noreferrer">
-    <img src="Instagram_icon.png"
-         alt="Instagram"
-         class="w-6 h-6 hover:opacity-80 transition" />
-  </a></h1>
+      <h1 id="title" class="text-xl font-bold">moigrant
+       </h1>
       <div class="flex space-x-2">
         
         <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
@@ -44,7 +40,9 @@
         </ul>
         <a href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" class="w-full bg-green-500 text-white px-4 py-2 rounded" id="whatsapp-link">
           📲 Заказать платную услугу в WhatsApp
-        </a>
+        </a><div class="mt-4 p-4 bg-gray-100">
+  Отступ сверху и внутренний отступ
+</div>
       </div>
     </div>
   </div>
@@ -103,7 +101,9 @@
   rel="noopener noreferrer"
 >
   📲 Заказать платную услугу в WhatsApp
-</a>
+</a><div class="mt-4 p-4 bg-gray-100">
+  Отступ сверху и внутренний отступ
+</div>
   </div>
 
   <!-- Третья страница - Результаты -->
@@ -132,7 +132,9 @@
 >
   📲 Заказать платную услугу в WhatsApp
 </a>
-
+<div class="mt-4 p-4 bg-gray-100">
+  Отступ сверху и внутренний отступ
+</div>
   </div>
 
   <script>
@@ -254,7 +256,9 @@
   rel="noopener noreferrer"
 >
  ${t.whatsappText}
-</a>
+</a><div class="mt-4 p-4 bg-gray-100">
+  Отступ сверху и внутренний отступ
+</div>
       `;
     }
     function updateLanguage() {
