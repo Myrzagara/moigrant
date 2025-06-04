@@ -21,7 +21,7 @@
       <h2 id="welcome-title" class="text-2xl font-bold">Узнай свои шансы на грант в ВУЗ</h2>
       <p id="welcome-text">Заполни короткий опросник и узнай, куда реально поступить на грант с твоим ЕНТ баллом.</p>
       <button onclick="goToForm()" class="w-full bg-blue-500 text-white py-2 rounded mt-4" id="start-btn">
-        Начать
+        Начать бесплатно
       </button>
 
        <div id="promo-text" class="mt-6 p-4 bg-blue-50 rounded-lg text-left">
@@ -35,8 +35,8 @@
           <li>Интересующие специальности</li>
           <li>В каких городах хочешь учиться</li>
         </ul>
-        <a href="https://wa.me/yourwhatsappnumber" class="inline-block bg-green-500 text-white px-4 py-2 rounded" id="whatsapp-link">
-          📲 Заказать консультацию в WhatsApp
+        <a href="https://wa.me/77027728593" class="inline-block bg-green-500 text-white px-4 py-2 rounded" id="whatsapp-link">
+          📲 Заказать платную услугу в WhatsApp
         </a>
       </div>
     </div>
@@ -88,6 +88,9 @@
     <button id="check-btn" onclick="checkChance()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">
       Узнать шансы
     </button>
+     <a href="https://wa.me/77027728593" class="inline-block bg-green-500 text-white px-4 py-2 rounded" id="whatsapp-link">
+          📲 Заказать платную услугу в WhatsApp
+        </a>
   </div>
 
   <!-- Третья страница - Результаты -->
@@ -107,6 +110,9 @@
     <button onclick="goBackToForm()" class="w-full bg-blue-500 text-white py-2 rounded">
       <span id="back-btn-text">Вернуться назад</span>
     </button>
+     <a href="https://wa.me/77027728593" class="inline-block bg-green-500 text-white px-4 py-2 rounded" id="whatsapp-link">
+          📲 Заказать платную услугу в WhatsApp
+        </a>
   </div>
 
   <script>
@@ -151,7 +157,7 @@
         promoList2: 'Выбранная комбинация',
         promoList3: 'Интересующие специальности',
         promoList4: 'В каких городах хочешь учиться',
-        whatsappText: '📲 Заказать консультацию в WhatsApp'
+        whatsappText: '📲 Заказать платную услугу в WhatsApp'
       },
       kz: {
         title: 'Грант мүмкіндігі',
@@ -191,7 +197,7 @@
         promoList2: 'Таңдаған комбинацияң',
         promoList3: 'Қызықтыратын мамандықтар',
         promoList4: 'Қай қалаларда оқығың келеді',
-        whatsappText: '📲 WhatsApp арқылы кеңеске тапсырыс беру'
+        whatsappText: '📲 WhatsApp-та ақылы қызметке тапсырыс беру'
       }
     };
   
@@ -217,7 +223,7 @@
           <li>${t.promoList3}</li>
           <li>${t.promoList4}</li>
         </ul>
-        <a href="https://wa.me/yourwhatsappnumber" class="inline-block bg-green-500 text-white px-4 py-2 rounded" id="whatsapp-link">
+        <a href="https://wa.me/77027728593" class="inline-block bg-green-500 text-white px-4 py-2 rounded" id="whatsapp-link">
           ${t.whatsappText}
         </a>
       `;
