@@ -10,13 +10,14 @@
   <!-- Первая страница - Приветствие -->
   <div id="welcome-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4">
     <div class="flex justify-between items-center">
-      <h1 id="title" class="text-xl font-bold">Шанс на грант</h1>
+      <h1 id="title" class="text-xl font-bold">Шанс на грант
+        <a href="https://instagram.com/moigrant" target="_blank" rel="noopener noreferrer">
+    <img src="Instagram_icon.png"
+         alt="Instagram"
+         class="w-6 h-6 hover:opacity-80 transition" />
+  </a></h1>
       <div class="flex space-x-2">
-         <a href="https://instagram.com/moigrant" target="_blank" rel="noopener noreferrer">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
-           alt="Instagram"
-           class="w-6 h-6 hover:opacity-80 transition" />
-    </a>
+        
         <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
         <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
       </div>
@@ -94,9 +95,15 @@
     <button id="check-btn" onclick="checkChance()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">
       Узнать шансы
     </button>
-     <a href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" class="w-full bg-green-500 text-white px-4 py-2 rounded" id="whatsapp-link">
-          📲 Заказать платную услугу в WhatsApp
-        </a>
+    <a 
+  href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" 
+  class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-center block" 
+  id="whatsapp-link" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>
+  📲 Заказать платную услугу в WhatsApp
+</a>
   </div>
 
   <!-- Третья страница - Результаты -->
@@ -116,9 +123,16 @@
     <button onclick="goBackToForm()" class="w-full bg-blue-500 text-white py-2 rounded">
       <span id="back-btn-text">Вернуться назад</span>
     </button>
-     <a href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" class="w-full bg-green-500 text-white px-4 py-2 rounded" id="whatsapp-link">
-          📲 Заказать платную услугу в WhatsApp
-        </a>
+     <a 
+  href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" 
+  class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-center block" 
+  id="whatsapp-link" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>
+  📲 Заказать платную услугу в WhatsApp
+</a>
+
   </div>
 
   <script>
@@ -232,9 +246,15 @@
           <li>${t.promoList4}</li>
            <li>${t.promoList5}</li>
         </ul>
-        <a href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" class="w-full bg-green-500 text-white px-4 py-2 rounded" id="whatsapp-link">
-          ${t.whatsappText}
-        </a>
+         <a 
+  href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" 
+  class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-center block" 
+  id="whatsapp-link" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>
+ ${t.whatsappText}
+</a>
       `;
     }
     function updateLanguage() {
