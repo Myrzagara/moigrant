@@ -68,6 +68,11 @@
       </div>
     </div>
 
+      <div>
+      <label id="label-phone" for="phone" class="block text-sm font-medium">Номер телефона</label>
+      <input id="phone" type="tel" class="w-full border rounded px-3 py-2 mt-1" placeholder="+7 (XXX) XXX-XX-XX">
+    </div>
+
     <div>
       <label id="label-city" for="city" class="block text-sm font-medium">Город</label>
       <select id="city" class="w-full border rounded px-3 py-2 mt-1">
@@ -176,6 +181,7 @@
         welcomeTitle: 'Узнай свои шансы на грант в ВУЗ',
         welcomeText: 'Заполни короткий опросник и узнай, куда реально поступить на грант с твоим ЕНТ баллом.',
         startBtn: 'Начать бесплатно',
+        phone: 'Номер телефона',
         city: 'Город',
         score: 'ЕНТ балл',
         combo: 'Комбинация предметов',
@@ -218,6 +224,7 @@
         welcomeTitle: 'Грантқа түсу мүмкіндігін біліңіз',
         welcomeText: 'Қысқа сауалнаманы толтырыңыз және ҰБТ баллыңызбен грантқа қай жерге түсе алатыныңызды біліңіз.',
         startBtn: 'Тегін бастау ',
+        phone: 'Телефон нөмірі',
         city: 'Қала',
         score: 'ҰБТ балы',
         combo: 'Пәндер комбинациясы',
@@ -305,6 +312,7 @@
       
       // Обновляем вторую страницу
       document.getElementById('form-title').textContent = t.title;
+      document.getElementById('label-phone').textContent = t.phone;
       document.getElementById('label-city').textContent = t.city;
       document.getElementById('label-score').textContent = t.score;
       document.getElementById('label-combo').textContent = t.combo;
@@ -376,8 +384,59 @@
         specialtySelect.appendChild(option);
       });
     }
-    
+     async function saveClientData() {
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const city = document.getElementById('city').value;
+      const score = document.getElementById('score').value;
+      const combo = document.getElementById('combo').value;
+      const specialty = document.getElementById('specialty').value;
+      const university = document.getElementById('university').value;
+      
+      // Получаем названия вместо ID
+      const cityName = document.getElementById('city').options[document.getElementById('city').selectedIndex]?.text || '';
+      const comboName = document.getElementById('combo').options[document.getElementById('combo').selectedIndex]?.text || '';
+      const specialtyName = document.getElementById('specialty').options[document.getElementById('specialty').selectedIndex]?.text || '';
+      const universityName = document.getElementById('university').options[document.getElementById('university').selectedIndex]?.text || '';
+      
+      const clientData = {
+        name,
+        phone,
+        city: cityName,
+        cityId: city,
+        score,
+        combo: comboName,
+        comboId: combo,
+        specialty: specialtyName,
+        specialtyId: specialty,
+        university: universityName,
+        universityId: university,
+        language: lang,
+        timestamp: new Date().toISOString()
+      };
+      
+      try {
+        // Отправляем данные на сервер для сохранения
+        const response = await fetch('https://api.moigrant.kz/save-client', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(clientData)
+        });
+        
+        if (!response.ok) {
+          console.error('Ошибка при сохранении данных клиента');
+        }
+      } catch (error) {
+        console.error('Ошибка при отправке данных:', error);
+      }
+      
+      // Также сохраняем в localStorage для последующего использования
+      localStorage.setItem('clientData', JSON.stringify(clientData));
+    }
     async function checkChance() {
+      const phone = document.getElementById('phone').value;
       const cityId = document.getElementById('city').value;
       const score = document.getElementById('score').value;
       const comboId = document.getElementById('combo').value;
@@ -397,13 +456,15 @@
       }
 
       // Проверяем, все ли поля заполнены
-      if (!score || !comboId || !specialtyId || !universityId || !cityId) {
+      if (!phone || !score || !comboId || !specialtyId || !universityId || !cityId) {
         resultDiv.innerHTML = `<div class="text-red-500">${t.fillAll}</div>`;
         showResultPage();
         return;
       }
 
       try {
+
+            await saveClientData();
         // Запрашиваем данные с API
         const res = await fetch(`https://api.moigrant.kz/statistics?id_programm=${specialtyId}&id_university=${universityId}&score=${score}`);
         const data = await res.json();
@@ -494,6 +555,15 @@
     window.onload = async () => {
       updateLanguage();
       await updateSelects();
+
+     // Инициализация маски для телефона
+      const phoneInput = document.getElementById('phone');
+      if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+          let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+          e.target.value = !x[2] ? x[1] : x[1] + ' (' + x[2] + ') ' + x[3] + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+        });
+      }
   
       document.getElementById('combo').addEventListener('change', async () => {
         await populateSpecialties();
