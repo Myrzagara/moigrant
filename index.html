@@ -310,6 +310,7 @@
       // Обновляем третью страницу
       document.getElementById('result-title').textContent = t.resultTitle;
       document.getElementById('back-btn-text').textContent = t.backBtn;
+       document.getElementById('whatsapp-link').textContent = t.whatsappText;
   
       // Обновляем выпадающие списки
       document.querySelectorAll('select').forEach(select => {
@@ -504,20 +505,6 @@
               <div><strong>${t.universityLabel}:</strong> ${universityName}</div>
               <div><strong>${t.specialtyLabel}:</strong> ${specialtyName}</div>
             </div>
-
-            <div id="promo-text" class="mt-6 p-4 bg-blue-50 rounded-lg text-left">
-        <p class="font-bold mb-2">🎯 Увеличь шансы на грант!</p>
-        <p class="mb-2">Мы предлагаем 4 самых эффективных варианта на основе 5-летних данных, учитывая баллы, конкурс, квоты и твои предпочтения.</p>
-        <p class="mb-2">💬 Стоимость услуги - 9999 ₸</p>
-        <p class="mb-2">👉 Напиши в WhatsApp и отправь следующую информацию:</p>
-        <ul class="list-disc pl-5 mb-2 mt-4">
-          <li>Твой балл ЕНТ</li>
-          <li>Выбранная комбинация</li>
-          <li>Интересующие специальности</li>
-          <li>В каких городах хочешь учиться</li>
-          <li>В каких университетах хочешь учиться</li>
-        </ul>
-       <div class="mt-4 p-4 bg-gray-100 flex items-center justify-between">
           </div>
         `;
         
