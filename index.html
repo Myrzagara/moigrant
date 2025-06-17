@@ -557,7 +557,8 @@
 
      // Инициализация маски для телефона
       const phoneInput = document.getElementById('phone');
-   phoneInput.addEventListener('input', function(e) {
+      if (phoneInput) {
+     phoneInput.addEventListener('input', function(e) {
   // Получаем текущее значение и удаляем все нецифровые символы
   let value = e.target.value.replace(/\D/g, '');
   
