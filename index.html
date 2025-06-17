@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>moigrant</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/inputmask.min.js"></script>
 </head>
 <body class="bg-gray-100 p-4">
   <!-- Первая страница - Приветствие -->
@@ -70,7 +71,14 @@
 
       <div>
       <label id="label-phone" for="phone" class="block text-sm font-medium">Номер телефона</label>
-      <input id="phone" type="tel" class="w-full border rounded px-3 py-2 mt-1" placeholder="+7 (XXX) XXX-XX-XX">
+      <input type="text" id="phone" placeholder="+7 (___) ___-__-__">
+      <script>
+  Inputmask({ 
+    mask: "+7 (999) 999-99-99", 
+    showMaskOnHover: false, 
+    clearIncomplete: true 
+  }).mask(document.getElementById("phone"));
+</script>
     </div>
 
     <div>
@@ -555,40 +563,8 @@
       updateLanguage();
       await updateSelects();
 
-     // Инициализация маски для телефона
-      const phoneInput = document.getElementById('phone');
-      if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-    let value = e.target.value.replace(/\D/g, ''); // Удаляем всё, кроме цифр
-
-    if (value.startsWith('8')) {
-      value = '7' + value.slice(1); // Заменяем 8 на 7
-    }
-
-    if (value[0] !== '7') {
-      value = '7' + value; // Принудительно вставляем 7 в начало
-    }
-
-    value = value.slice(0, 11); // Максимум 11 цифр
-
-    // Форматируем
-    let formatted = '+7';
-    if (value.length > 1) {
-      formatted += ' (' + value.slice(1, 4);
-    }
-    if (value.length >= 4) {
-      formatted += ') ' + value.slice(4, 7);
-    }
-    if (value.length >= 7) {
-      formatted += '-' + value.slice(7, 9);
-    }
-    if (value.length >= 9) {
-      formatted += '-' + value.slice(9, 11);
-    }
-
-    e.target.value = formatted;
-  });
-      }
+   
+      
   
       document.getElementById('combo').addEventListener('change', async () => {
         await populateSpecialties();
