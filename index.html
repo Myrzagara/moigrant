@@ -383,10 +383,12 @@
       const t = translations[lang];
       
       if (!city) {
-        universityHint.textContent = t.noCitySelected;
+        //universityHint.textContent = t.noCitySelected;
+           universityHint.innerHTML = `<span class="text-red-500">${t.noCitySelected}</span>`;
         universityHint.classList.remove('hidden');
       } else if (!specialty) {
-        universityHint.textContent = t.noSpecialtySelected;
+           universityHint.innerHTML = `<span class="text-red-500">${t.noSpecialtySelected}</span>`;
+       // universityHint.textContent = t.noSpecialtySelected;
         universityHint.classList.remove('hidden');
       } else {
         universityHint.classList.add('hidden');
@@ -423,13 +425,15 @@
     
     // Проверяем, что universities существует и является массивом
     if (!universities || !Array.isArray(universities)) {
-      universityHint.textContent = t.noUniversitiesFound;
+        universityHint.innerHTML = `<span class="text-red-500">${t.noUniversitiesFound}</span>`;
+     // universityHint.textContent = t.noUniversitiesFound;
       universityHint.classList.remove('hidden');
       return;
     }
     
     if (universities.length === 0) {
-      universityHint.textContent = t.noGrantsForSpecialty;
+    //  universityHint.textContent = t.noGrantsForSpecialty;
+       universityHint.innerHTML = `<span class="text-red-500">${t.noGrantsForSpecialty}</span>`;
       universityHint.classList.remove('hidden');
     } else {
       universityHint.classList.add('hidden');
@@ -443,7 +447,8 @@
   } catch (error) {
     console.error('Error fetching universities:', noUniversitiesFound);
     universitySelect.innerHTML = `<option value="">${t.select}...</option>`;
-    universityHint.textContent = t.noUniversitiesFound;
+   // universityHint.textContent = t.noUniversitiesFound;
+     universityHint.innerHTML = `<span class="text-red-500">${t.noUniversitiesFound}</span>`;
     universityHint.classList.remove('hidden');
   }
     }
