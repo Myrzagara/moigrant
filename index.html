@@ -188,10 +188,12 @@
         allocated: 'Выделено грантов в 2024',
         nextYear: 'Выделено грантов в 2025',
         paymentTitle: 'Оплата',
-        paymentText: 'Для получения результатов необходимо произвести оплату 999 ₸',
+        paymentText: 'Для получения результатов необходимо произвести оплату 500 ₸',
         paymentButton: 'Перейти к оплате',
         verifyPayment: 'Проверить оплату',
-        checkingPayment: 'Проверяем оплату...'
+        checkingPayment: 'Проверяем оплату...',
+        whatsappText: '📲 Заказать платную услугу в WhatsApp',
+        whatsappMessage: 'Здравствуйте, я хочу заказать услугу по определению шансов на грант'
       },
       kz: {
         title: 'moigrant',
@@ -225,10 +227,12 @@
         allocated: '2024 жылы бөлінген гранттар',
         nextYear: '2025 жылға бөлінген гранттар',
         paymentTitle: 'Төлем',
-        paymentText: 'Нәтижелерді алу үшін 999 ₸ төлеу қажет',
+        paymentText: 'Нәтижелерді алу үшін 500 ₸ төлеу қажет',
         paymentButton: 'Төлемге өту',
         verifyPayment: 'Төлемді тексеру',
-        checkingPayment: 'Төлемді тексеруде...'
+        checkingPayment: 'Төлемді тексеруде...',
+         whatsappText: '📲 WhatsApp арқылы ақылы қызметті тапсырыс беру',
+        whatsappMessage: 'Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді'
       }
     };
   
@@ -236,8 +240,17 @@
       lang = l;
       updateLanguage();
       updateSelects();
+      updateWhatsAppLinks();
     }
-  
+    function updateWhatsAppLinks() {
+      const t = translations[lang];
+      const whatsappLinks = document.querySelectorAll('#whatsapp-link');
+      
+      whatsappLinks.forEach(link => {
+        link.textContent = t.whatsappText;
+        link.href = `https://wa.me/77027728593?text=${encodeURIComponent(t.whatsappMessage)}`;
+      });
+    }
     function updateLanguage() {
       const t = translations[lang];
       
@@ -394,9 +407,9 @@
         }, 1000); // Небольшая задержка для имитации перехода
       });
       // Показываем кнопку проверки оплаты через 5 секунд (имитация возврата пользователя)
-      setTimeout(() => {
+     /* setTimeout(() => {
         document.getElementById('verify-payment').classList.remove('hidden');
-      }, 20000);
+      }, 20000);*/
     }
     
     async function verifyPayment() {
@@ -405,7 +418,7 @@
       document.getElementById('payment-loading').classList.remove('hidden');
       
       // Имитация проверки оплаты (30 секунд)
-      await new Promise(resolve => setTimeout(resolve, 30000));
+      await new Promise(resolve => setTimeout(resolve, 15000));
       paymentVerified = true;
       await showResultPage();
     }
@@ -547,6 +560,7 @@
     async function initialize() {
       updateLanguage();
       await updateSelects();
+        updateWhatsAppLinks();
 
       // Инициализация маски для телефона
       const phoneInput = document.getElementById('phone');
