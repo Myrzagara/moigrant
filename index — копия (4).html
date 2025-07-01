@@ -65,7 +65,6 @@
       <select id="specialty" class="w-full border rounded px-3 py-2 mt-1">
         <option value="">Выберите специальность...</option>
       </select>
-      <div id="specialty-hint" class="text-xs text-gray-500 mt-1 hidden"></div>
     </div>
 
     <div>
@@ -73,7 +72,6 @@
       <select id="university" class="w-full border rounded px-3 py-2 mt-1">
         <option value="">Выберите университет...</option>
       </select>
-      <div id="university-hint" class="text-xs text-gray-500 mt-1 hidden"></div>
     </div>
 
     <button id="check-btn" onclick="checkChance()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">
@@ -198,11 +196,7 @@
         checkingPayment: 'Проверяем оплату...',
         whatsappText: '📲 Заказать платную услугу в WhatsApp',
         whatsappMessage: 'Здравствуйте, я хочу заказать услугу по определению шансов на грант',
-        screenshotHint: '📸 Сделай скриншот, чтобы сохранить результаты',
-        noCitySelected: 'Пожалуйста, выберите город, чтобы увидеть список университетов',
-        noSpecialtySelected: 'Пожалуйста, выберите специальность, чтобы увидеть список университетов',
-        noUniversitiesFound: 'По выбранной специальности в этом городе нет университетов с грантами',
-        noGrantsForSpecialty: 'По выбранной специальности в этом городе нет университетов, которые выделяли гранты в 2024 году'
+        screenshotHint: '📸 Сделай скриншот, чтобы сохранить результаты'
       },
       kz: {
         title: 'moigrant',
@@ -240,13 +234,9 @@
         paymentButton: 'Төлемге өту',
         verifyPayment: 'Төлемді тексеру',
         checkingPayment: 'Төлемді тексеруде...',
-        whatsappText: '📲 WhatsApp арқылы ақылы қызметті тапсырыс беру',
+         whatsappText: '📲 WhatsApp арқылы ақылы қызметті тапсырыс беру',
         whatsappMessage: 'Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді',
-        screenshotHint: '📸 Нәтижелерді сақтау үшін скриншот жасаңыз',
-        noCitySelected: 'Университеттер тізімін көру үшін қаланы таңдаңыз',
-        noSpecialtySelected: 'Университеттер тізімін көру үшін мамандықты таңдаңыз',
-        noUniversitiesFound: 'Таңдалған мамандық бойынша осы қалада грант беретін университеттер жоқ',
-        noGrantsForSpecialty: 'Таңдалған мамандық бойынша осы қалада 2024 жылы грант бөлген университеттер жоқ'
+        screenshotHint: '📸 Нәтижелерді сақтау үшін скриншот жасаңыз'
       }
     };
   
@@ -256,7 +246,6 @@
       updateSelects();
       updateWhatsAppLinks();
     }
-    
     function updateWhatsAppLinks() {
       const t = translations[lang];
       const whatsappLinks = document.querySelectorAll('#whatsapp-link');
@@ -266,7 +255,6 @@
         link.href = `https://wa.me/77027728593?text=${encodeURIComponent(t.whatsappMessage)}`;
       });
     }
-    
     function updateLanguage() {
       const t = translations[lang];
       
@@ -306,13 +294,9 @@
           select.options[0].text = t.select + '...';
         }
       });
-      
-      if (document.getElementById('screenshot-hint')) {
+       if (document.getElementById('screenshot-hint')) {
         document.getElementById('screenshot-hint').textContent = t.screenshotHint;
       }
-      
-      // Обновляем подсказки
-      updateUniversityHint();
     }
   
     async function fetchData(endpoint) {
@@ -357,72 +341,13 @@
       const specialties = await fetchData(endpoint);
   
       const specialtySelect = document.getElementById('specialty');
-      const specialtyHint = document.getElementById('specialty-hint');
       specialtySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
-      
-      if (specialties.length === 0) {
-        specialtyHint.textContent = translations[lang].noGrantsForSpecialty;
-        specialtyHint.classList.remove('hidden');
-      } else {
-        specialtyHint.classList.add('hidden');
-      }
   
       specialties.forEach(item => {
         const option = document.createElement('option');
         option.value = item.id;
         option.textContent = lang === 'ru' ? item.name_ru : item.name_kz;
         specialtySelect.appendChild(option);
-      });
-    }
-  
-    function updateUniversityHint() {
-      const city = document.getElementById('city').value;
-      const specialty = document.getElementById('specialty').value;
-      const universityHint = document.getElementById('university-hint');
-      const t = translations[lang];
-      
-      if (!city) {
-        universityHint.textContent = t.noCitySelected;
-        universityHint.classList.remove('hidden');
-      } else if (!specialty) {
-        universityHint.textContent = t.noSpecialtySelected;
-        universityHint.classList.remove('hidden');
-      } else {
-        universityHint.classList.add('hidden');
-      }
-    }
-  
-    async function populateUniversities() {
-      const cityId = document.getElementById('city').value;
-      const specialtyId = document.getElementById('specialty').value;
-      const universitySelect = document.getElementById('university');
-      const universityHint = document.getElementById('university-hint');
-      const t = translations[lang];
-      
-      updateUniversityHint();
-      
-      if (!cityId || !specialtyId) {
-        universitySelect.innerHTML = `<option value="">${t.select}...</option>`;
-        return;
-      }
-  
-      const endpoint = `https://api.moigrant.kz/universities?id_programm=${specialtyId}&id_city=${cityId}`;
-      const universities = await fetchData(endpoint);
-      
-      universitySelect.innerHTML = `<option value="">${t.select}...</option>`;
-      
-      if (universities.length === 0) {
-        universityHint.textContent = t.noGrantsForSpecialty;
-        universityHint.classList.remove('hidden');
-      } else {
-        universityHint.classList.add('hidden');
-      }
-  
-      universities.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.id;
-        option.textContent = item[`name_${lang}`] || item.name || item.id;
-        universitySelect.appendChild(option);
       });
     }
   
@@ -480,7 +405,7 @@
       document.getElementById('form-page').classList.add('hidden');
       document.getElementById('payment-page').classList.remove('hidden');
       
-      // Следим за переходом по ссылке оплаты
+        // Следим за переходом по ссылке оплаты
       const paymentButton = document.getElementById('payment-button');
       paymentButton.addEventListener('click', function() {
         // После клика по ссылке оплаты показываем кнопку проверки
@@ -488,6 +413,10 @@
           document.getElementById('verify-payment').classList.remove('hidden');
         }, 1000); // Небольшая задержка для имитации перехода
       });
+      // Показываем кнопку проверки оплаты через 5 секунд (имитация возврата пользователя)
+     /* setTimeout(() => {
+        document.getElementById('verify-payment').classList.remove('hidden');
+      }, 20000);*/
     }
     
     async function verifyPayment() {
@@ -495,7 +424,7 @@
       document.getElementById('verify-payment').classList.add('hidden');
       document.getElementById('payment-loading').classList.remove('hidden');
       
-      // Имитация проверки оплаты (15 секунд)
+      // Имитация проверки оплаты (30 секунд)
       await new Promise(resolve => setTimeout(resolve, 15000));
       paymentVerified = true;
       await showResultPage();
@@ -638,7 +567,7 @@
     async function initialize() {
       updateLanguage();
       await updateSelects();
-      updateWhatsAppLinks();
+        updateWhatsAppLinks();
 
       // Инициализация маски для телефона
       const phoneInput = document.getElementById('phone');
@@ -683,16 +612,18 @@
       }
   
       document.getElementById('combo').addEventListener('change', populateSpecialties);
-      
-      // Обработчики для обновления списка университетов
-      document.getElementById('city').addEventListener('change', function() {
-        updateUniversityHint();
-        populateUniversities();
-      });
-      
-      document.getElementById('specialty').addEventListener('change', function() {
-        updateUniversityHint();
-        populateUniversities();
+  
+      document.getElementById('specialty').addEventListener('change', async function(e) {
+        const universitySelect = document.getElementById('university');
+        universitySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
+  
+        const cityId = document.getElementById('city').value;
+        const specialtyId = e.target.value;
+  
+        if (specialtyId && cityId) {
+          const endpoint = `https://api.moigrant.kz/universities?id_programm=${specialtyId}&id_city=${cityId}`;
+          await populateSelect('university', endpoint, 'name');
+        }
       });
     }
 
