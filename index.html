@@ -385,10 +385,18 @@
       document.getElementById('form-page').classList.add('hidden');
       document.getElementById('payment-page').classList.remove('hidden');
       
+        // Следим за переходом по ссылке оплаты
+      const paymentButton = document.getElementById('payment-button');
+      paymentButton.addEventListener('click', function() {
+        // После клика по ссылке оплаты показываем кнопку проверки
+        setTimeout(() => {
+          document.getElementById('verify-payment').classList.remove('hidden');
+        }, 1000); // Небольшая задержка для имитации перехода
+      });
       // Показываем кнопку проверки оплаты через 5 секунд (имитация возврата пользователя)
       setTimeout(() => {
         document.getElementById('verify-payment').classList.remove('hidden');
-      }, 5000);
+      }, 20000);
     }
     
     async function verifyPayment() {
