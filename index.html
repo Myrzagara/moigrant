@@ -246,7 +246,8 @@
         noCitySelected: 'Университеттер тізімін көру үшін қаланы таңдаңыз',
         noSpecialtySelected: 'Университеттер тізімін көру үшін мамандықты таңдаңыз',
         noUniversitiesFound: 'Таңдалған мамандық бойынша осы қалада грант беретін университеттер жоқ',
-        noGrantsForSpecialty: 'Таңдалған мамандық бойынша осы қалада 2024 жылы грант бөлген университеттер жоқ'
+        noGrantsForSpecialty: 'Таңдалған мамандық бойынша осы қалада 2024 жылы грант бөлген университеттер жоқ',
+      
       }
     };
   
@@ -440,9 +441,9 @@
       });
     }
   } catch (error) {
-    console.error('Error fetching universities:', error);
+    console.error('Error fetching universities:', noUniversitiesFound);
     universitySelect.innerHTML = `<option value="">${t.select}...</option>`;
-    universityHint.textContent = t.error;
+    universityHint.textContent = t.noUniversitiesFound;
     universityHint.classList.remove('hidden');
   }
     }
