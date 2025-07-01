@@ -406,24 +406,45 @@
         return;
       }
   
-      const endpoint = `https://api.moigrant.kz/universities?id_programm=${specialtyId}&id_city=${cityId}`;
-      const universities = await fetchData(endpoint);
-      
-      universitySelect.innerHTML = `<option value="">${t.select}...</option>`;
-      
-      if (universities.length === 0) {
-        universityHint.textContent = t.noGrantsForSpecialty;
-        universityHint.classList.remove('hidden');
-      } else {
-        universityHint.classList.add('hidden');
-      }
-  
+    
+  try {
+    const endpoint = `https://api.moigrant.kz/universities?id_programm=${specialtyId}&id_city=${cityId}`;
+    const response = await fetch(endpoint);
+    
+    // Проверяем, что ответ успешный и содержит данные
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    const universities = await response.json();
+    
+    universitySelect.innerHTML = `<option value="">${t.select}...</option>`;
+    
+    // Проверяем, что universities существует и является массивом
+    if (!universities || !Array.isArray(universities)) {
+      universityHint.textContent = t.error;
+      universityHint.classList.remove('hidden');
+      return;
+    }
+    
+    if (universities.length === 0) {
+      universityHint.textContent = t.noGrantsForSpecialty;
+      universityHint.classList.remove('hidden');
+    } else {
+      universityHint.classList.add('hidden');
       universities.forEach(item => {
         const option = document.createElement('option');
         option.value = item.id;
         option.textContent = item[`name_${lang}`] || item.name || item.id;
         universitySelect.appendChild(option);
       });
+    }
+  } catch (error) {
+    console.error('Error fetching universities:', error);
+    universitySelect.innerHTML = `<option value="">${t.select}...</option>`;
+    universityHint.textContent = t.error;
+    universityHint.classList.remove('hidden');
+  }
     }
   
     async function saveClientData() {
