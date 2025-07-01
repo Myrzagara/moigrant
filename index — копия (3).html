@@ -10,8 +10,10 @@
   <!-- Первая страница - Приветствие -->
   <div id="welcome-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4">
     <div class="flex justify-between items-center">
-      <h1 id="title" class="text-xl font-bold">moigrant</h1>
+      <h1 id="title" class="text-xl font-bold">moigrant
+       </h1>
       <div class="flex space-x-2">
+        
         <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
         <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
       </div>
@@ -23,6 +25,8 @@
       <button onclick="goToForm()" class="w-full bg-blue-500 text-white py-2 rounded mt-4" id="start-btn">
         Начать бесплатно
       </button>
+
+      
     </div>
   </div>
 
@@ -36,7 +40,7 @@
       </div>
     </div>
 
-    <div>
+      <div>
       <label id="label-phone" for="phone" class="block text-sm font-medium">Номер телефона</label>
       <input id="phone" type="tel" class="w-full border rounded px-3 py-2 mt-1" placeholder="+7 (XXX) XXX-XX-XX">
     </div>
@@ -77,49 +81,30 @@
     <button id="check-btn" onclick="checkChance()" class="w-full bg-blue-500 text-white py-2 rounded mt-4">
       Узнать шансы
     </button>
-    <a href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-center block" id="whatsapp-link" target="_blank" rel="noopener noreferrer">
-      📲 Заказать платную услугу в WhatsApp
+    <a 
+  href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" 
+  class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-center block" 
+  id="whatsapp-link" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>
+  📲 Заказать платную услугу в WhatsApp
+</a>
+<div class="mt-4 p-4 bg-gray-100 flex items-center justify-between">
+ 
+
+  <div class="flex space-x-4">
+    <a href="https://www.instagram.com/moigrant" target="_blank">
+      <img src="instagram.png" alt="Instagram" class="w-6 h-6 hover:opacity-80">
     </a>
-    <div class="mt-4 p-4 bg-gray-100 flex items-center justify-between">
-      <div class="flex space-x-4">
-        <a href="https://www.instagram.com/moigrant" target="_blank">
-          <img src="instagram.png" alt="Instagram" class="w-6 h-6 hover:opacity-80">
-        </a>
-        <a href="https://t.me/moigrant_bot" target="_blank">
-          <img src="telegram.png" alt="Telegram" class="w-6 h-6 hover:opacity-80">
-        </a>
-      </div>
-    </div>
+    <a href="https://t.me/moigrant_bot" target="_blank">
+      <img src="telegram.png" alt="Telegram" class="w-6 h-6 hover:opacity-80">
+    </a>
+  </div>
+</div>
   </div>
 
-  <!-- Третья страница - Оплата -->
-  <div id="payment-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4 hidden">
-    <div class="flex justify-between items-center">
-      <h1 id="payment-title" class="text-xl font-bold">Оплата</h1>
-      <div class="flex space-x-2">
-        <button onclick="setLanguage('ru')" class="text-2xl">🇷🇺</button>
-        <button onclick="setLanguage('kz')" class="text-2xl">🇰🇿</button>
-      </div>
-    </div>
-
-    <div class="text-center space-y-4">
-      <p id="payment-text">Для получения результатов необходимо произвести оплату 999 ₸</p>
-      <a id="payment-button" href="https://pay.kaspi.kz/pay/opxmzk2q" target="_blank" class="w-full bg-blue-500 text-white py-2 rounded mt-4 block">
-        Перейти к оплате
-      </a>
-      <button id="verify-payment" onclick="verifyPayment()" class="w-full bg-green-500 text-white py-2 rounded mt-4 hidden">
-        Проверить оплату
-      </button>
-      <div id="payment-loading" class="hidden">
-        <div class="flex justify-center items-center space-x-2">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-          <span>Проверяем оплату...</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Четвертая страница - Результаты -->
+  <!-- Третья страница - Результаты -->
   <div id="result-page" class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 space-y-4 hidden">
     <div class="flex justify-between items-center">
       <h1 id="result-title" class="text-xl font-bold">Результаты</h1>
@@ -136,24 +121,31 @@
     <button onclick="goBackToForm()" class="w-full bg-blue-500 text-white py-2 rounded">
       <span id="back-btn-text">Вернуться назад</span>
     </button>
-    <a href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-center block" id="whatsapp-link" target="_blank" rel="noopener noreferrer">
-      📲 Заказать платную услугу в WhatsApp
+     <a 
+  href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" 
+  class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-center block" 
+  id="whatsapp-link" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>
+  📲 Заказать платную услугу в WhatsApp
+</a>
+<div class="mt-4 p-4 bg-gray-100 flex items-center justify-between">
+ 
+
+  <div class="flex space-x-4">
+    <a href="https://www.instagram.com/moigrant" target="_blank">
+      <img src="instagram.png" alt="Instagram" class="w-6 h-6 hover:opacity-80">
     </a>
-    <div class="mt-4 p-4 bg-gray-100 flex items-center justify-between">
-      <div class="flex space-x-4">
-        <a href="https://www.instagram.com/moigrant" target="_blank">
-          <img src="instagram.png" alt="Instagram" class="w-6 h-6 hover:opacity-80">
-        </a>
-        <a href="https://t.me/moigrant_bot" target="_blank">
-          <img src="telegram.png" alt="Telegram" class="w-6 h-6 hover:opacity-80">
-        </a>
-      </div>
-    </div>
+    <a href="https://t.me/moigrant_bot" target="_blank">
+      <img src="telegram.png" alt="Telegram" class="w-6 h-6 hover:opacity-80">
+    </a>
+  </div>
+</div>
   </div>
 
   <script>
     let lang = 'kz';
-    let paymentVerified = false;
   
     const translations = {
       ru: {
@@ -187,17 +179,23 @@
         applicants: 'Заявителей на 1 грант',
         allocated: 'Выделено грантов в 2024',
         nextYear: 'Выделено грантов в 2025',
-        paymentTitle: 'Оплата',
-        paymentText: 'Для получения результатов необходимо произвести оплату 999 ₸',
-        paymentButton: 'Перейти к оплате',
-        verifyPayment: 'Проверить оплату',
-        checkingPayment: 'Проверяем оплату...'
+         promoTitle: '🎯 Увеличь шансы на грант!',
+        promoText: 'Мы предлагаем 4 самых эффективных варианта на основе 5-летних данных, учитывая баллы, конкурс, квоты и твои предпочтения.',
+        promoPrice: '💬 Стоимость услуги - 9999 ₸',
+        promoInstruction: '👉 Напиши в WhatsApp и отправь следующую информацию:',
+        promoList1: 'Твой балл ЕНТ',
+        promoList2: 'Выбранная комбинация',
+        promoList3: 'Интересующие специальности',
+        promoList4: 'В каких городах хочешь учиться',
+        promoList5: 'В каких университетах хочешь учиться',
+        promoList6: 'Виды квот (если есть)',
+        whatsappText: '📲 Заказать платную услугу в WhatsApp'
       },
       kz: {
         title: 'moigrant',
         welcomeTitle: 'Грантқа түсу мүмкіндігін біліңіз',
         welcomeText: 'Қысқа сауалнаманы толтырыңыз және ҰБТ баллыңызбен грантқа қай жерге түсе алатыныңызды біліңіз.',
-        startBtn: 'Тегін бастау',
+        startBtn: 'Тегін бастау ',
         phone: 'Телефон нөмірі',
         city: 'Қала',
         score: 'ҰБТ балы',
@@ -224,11 +222,17 @@
         applicants: '1 грантқа арызданушылар',
         allocated: '2024 жылы бөлінген гранттар',
         nextYear: '2025 жылға бөлінген гранттар',
-        paymentTitle: 'Төлем',
-        paymentText: 'Нәтижелерді алу үшін 999 ₸ төлеу қажет',
-        paymentButton: 'Төлемге өту',
-        verifyPayment: 'Төлемді тексеру',
-        checkingPayment: 'Төлемді тексеруде...'
+        promoTitle: '🎯 Грантқа түсу мүмкіндігін арттыр!',
+        promoText: 'Біз 5 жылдық деректерге сүйене отырып, ұпай, конкурс, квота және қалауыңа сай 4 ең тиімді нұсқа ұсынамыз.',
+        promoPrice: '💬 Қызмет бағасы – 20 000 ₸',
+        promoInstruction: '👉 WhatsApp-қа жазып, келесі ақпаратты жібер:',
+        promoList1: 'ҰБТ балың',
+        promoList2: 'Таңдаған комбинацияң',
+        promoList3: 'Қызықтыратын мамандықтар',
+        promoList4: 'Қай қалаларда оқығың келеді',
+        promoList5: 'Қай университеттерде оқығың келеді',
+        promoList6: 'Квота түрін (бар болса)',
+        whatsappText: '📲 WhatsApp-та ақылы қызметке тапсырыс беру'
       }
     };
   
@@ -236,8 +240,39 @@
       lang = l;
       updateLanguage();
       updateSelects();
+      updatePromoText();
     }
-  
+  function updatePromoText() {
+      const t = translations[lang];
+      const promoDiv = document.getElementById('promo-text');
+      if (!promoDiv) return;
+      
+      promoDiv.innerHTML = `
+        <p class="font-bold mb-2">${t.promoTitle}</p>
+        <p class="mb-2">${t.promoText}</p>
+        <p class="mb-2">${t.promoPrice}</p>
+        <p class="mb-2">${t.promoInstruction}</p>
+        <ul class="list-disc pl-5 mb-2">
+          <li>${t.promoList1}</li>
+          <li>${t.promoList2}</li>
+          <li>${t.promoList3}</li>
+          <li>${t.promoList4}</li>
+           <li>${t.promoList5}</li>
+            <li>${t.promoList6}</li>
+        </ul>
+         <a 
+  href="https://wa.me/77027728593?text=Сәлеметсіз бе, мен грантқа түсу мүмкіндігін анықтау қызметін алғым келеді" 
+  class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-center block" 
+  id="whatsapp-link" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>
+ ${t.whatsappText}
+</a><div class="mt-4 p-4 bg-gray-100">
+  Отступ сверху и внутренний отступ
+</div>
+      `;
+    }
     function updateLanguage() {
       const t = translations[lang];
       
@@ -257,15 +292,6 @@
       document.getElementById('label-university').textContent = t.university;
       document.getElementById('check-btn').textContent = t.btn;
       document.getElementById('score').placeholder = t.scorePlaceholder;
-      
-      // Обновляем страницу оплаты
-      document.getElementById('payment-title').textContent = t.paymentTitle;
-      document.getElementById('payment-text').textContent = t.paymentText;
-      document.getElementById('payment-button').textContent = t.paymentButton;
-      document.getElementById('verify-payment').textContent = t.verifyPayment;
-      if (document.querySelector('#payment-loading span')) {
-        document.querySelector('#payment-loading span').textContent = t.checkingPayment;
-      }
       
       // Обновляем третью страницу
       document.getElementById('result-title').textContent = t.resultTitle;
@@ -330,8 +356,7 @@
         specialtySelect.appendChild(option);
       });
     }
-  
-    async function saveClientData() {
+     async function saveClientData() {
       const phone = document.getElementById('phone').value;
       const city = document.getElementById('city').value;
       const score = document.getElementById('score').value;
@@ -346,6 +371,7 @@
       const universityName = document.getElementById('university').options[document.getElementById('university').selectedIndex]?.text || '';
       
       const clientData = {
+     
         phone,
         city: cityName,
         cityId: city,
@@ -380,28 +406,6 @@
       // Также сохраняем в localStorage для последующего использования
       localStorage.setItem('clientData', JSON.stringify(clientData));
     }
-    
-    function showPaymentPage() {
-      document.getElementById('form-page').classList.add('hidden');
-      document.getElementById('payment-page').classList.remove('hidden');
-      
-      // Показываем кнопку проверки оплаты через 5 секунд (имитация возврата пользователя)
-      setTimeout(() => {
-        document.getElementById('verify-payment').classList.remove('hidden');
-      }, 5000);
-    }
-    
-    async function verifyPayment() {
-      // Показываем индикатор загрузки
-      document.getElementById('verify-payment').classList.add('hidden');
-      document.getElementById('payment-loading').classList.remove('hidden');
-      
-      // Имитация проверки оплаты (30 секунд)
-      await new Promise(resolve => setTimeout(resolve, 30000));
-      paymentVerified = true;
-      await showResultPage();
-    }
-    
     async function checkChance() {
       const phone = document.getElementById('phone').value;
       const cityId = document.getElementById('city').value;
@@ -430,28 +434,8 @@
       }
 
       try {
-        await saveClientData();
-        showPaymentPage();
-      } catch (error) {
-        console.error('Error checking statistics:', error);
-        resultDiv.innerHTML = `<div class="text-red-500">${t.error}</div>`;
-        showResultPage();
-      }
-    }
-    
-    async function showResultPage() {
-      // Если оплата не подтверждена, не показываем результаты
-      if (!paymentVerified) return;
-      
-      const score = document.getElementById('score').value;
-      const specialtyId = document.getElementById('specialty').value;
-      const universityId = document.getElementById('university').value;
-      const universityName = document.getElementById('university').options[document.getElementById('university').selectedIndex]?.text || '';
-      const specialtyName = document.getElementById('specialty').options[document.getElementById('specialty').selectedIndex]?.text || '';
-      const t = translations[lang];
-      const resultDiv = document.getElementById('result-content');
 
-      try {
+            await saveClientData();
         // Запрашиваем данные с API
         const res = await fetch(`https://api.moigrant.kz/statistics?id_programm=${specialtyId}&id_university=${universityId}&score=${score}`);
         const data = await res.json();
@@ -467,7 +451,7 @@
             </div>
 
             <div class="divide-y divide-gray-200 text-sm">
-              <div class="flex justify-between py-2">
+               <div class="flex justify-between py-2">
                 <span>${t.score}:</span>
                 <span class="font-semibold">${score}</span>
               </div>
@@ -491,6 +475,7 @@
                 <span>${t.coefficient}:</span>
                 <span class="font-semibold">${data.coefficient}</span>
               </div>
+            
               <div class="flex justify-between py-2">
                 <span>${t.allocated}:</span>
                 <span class="font-semibold">${data.count2024}</span>
@@ -508,14 +493,17 @@
           </div>
         `;
         
-        document.getElementById('payment-page').classList.add('hidden');
-        document.getElementById('result-page').classList.remove('hidden');
+        showResultPage();
       } catch (error) {
         console.error('Error checking statistics:', error);
         resultDiv.innerHTML = `<div class="text-red-500">${t.error}</div>`;
-        document.getElementById('payment-page').classList.add('hidden');
-        document.getElementById('result-page').classList.remove('hidden');
+        showResultPage();
       }
+    }
+    
+    function showResultPage() {
+      document.getElementById('form-page').classList.add('hidden');
+      document.getElementById('result-page').classList.remove('hidden');
     }
     
     function goBackToForm() {
@@ -535,56 +523,64 @@
       document.getElementById('form-page').classList.remove('hidden');
     }
   
-    // Инициализация при загрузке страницы
-    async function initialize() {
+    window.onload = async () => {
       updateLanguage();
       await updateSelects();
 
-      // Инициализация маски для телефона
+     // Инициализация маски для телефона
       const phoneInput = document.getElementById('phone');
       if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-          let value = e.target.value.replace(/\D/g, '');
-          let formattedValue = '+7';
-          
-          if (value.length > 1) {
-            value = value.substring(1);
-            formattedValue += ' (' + value.substring(0, 3);
-            
-            if (value.length > 3) {
-              formattedValue += ') ' + value.substring(3, 6);
-            }
-            if (value.length > 6) {
-              formattedValue += '-' + value.substring(6, 8);
-            }
-            if (value.length > 8) {
-              formattedValue += '-' + value.substring(8, 10);
-            }
-          }
-          
-          e.target.value = formattedValue;
-        });
+     phoneInput.addEventListener('input', function(e) {
+  // Получаем текущее значение и удаляем все нецифровые символы
+  let value = e.target.value.replace(/\D/g, '');
+  
+  // Форматируем номер по шаблону: +7 (XXX) XXX-XX-XX
+  let formattedValue = '+7';
+  
+  if (value.length > 1) {
+    value = value.substring(1); // Удаляем первую 7 (она уже есть в +7)
+    formattedValue += ' (' + value.substring(0, 3);
+    
+    if (value.length > 3) {
+      formattedValue += ') ' + value.substring(3, 6);
+    }
+    if (value.length > 6) {
+      formattedValue += '-' + value.substring(6, 8);
+    }
+    if (value.length > 8) {
+      formattedValue += '-' + value.substring(8, 10);
+    }
+  }
+  
+  // Устанавливаем отформатированное значение
+  e.target.value = formattedValue;
+});
 
-        phoneInput.addEventListener('paste', function(e) {
-          e.preventDefault();
-          let pastedText = (e.clipboardData || window.clipboardData).getData('text');
-          let numbers = pastedText.replace(/\D/g, '');
-          
-          if (numbers.startsWith('7') || numbers.startsWith('8')) {
-            numbers = '7' + numbers.substring(1);
-          }
-          
-          this.value = '+7';
-          if (numbers.length > 0) {
-            this.value += numbers.substring(0, 10);
-            this.dispatchEvent(new Event('input'));
-          }
-        });
+// Обработчик для вставки (paste)
+phoneInput.addEventListener('paste', function(e) {
+  e.preventDefault(); // Отменяем стандартное поведение
+  let pastedText = (e.clipboardData || window.clipboardData).getData('text');
+  let numbers = pastedText.replace(/\D/g, '');
+  
+  // Если номер начинается с 7 или 8, заменяем на +7
+  if (numbers.startsWith('7') || numbers.startsWith('8')) {
+    numbers = '7' + numbers.substring(1);
+  }
+  
+  // Устанавливаем значение и триггерим событие input
+  this.value = '+7';
+  if (numbers.length > 0) {
+    this.value += numbers.substring(0, 10);
+    this.dispatchEvent(new Event('input'));
+  }
+});
       }
   
-      document.getElementById('combo').addEventListener('change', populateSpecialties);
+      document.getElementById('combo').addEventListener('change', async () => {
+        await populateSpecialties();
+      });
   
-      document.getElementById('specialty').addEventListener('change', async function(e) {
+      document.getElementById('specialty').addEventListener('change', async (e) => {
         const universitySelect = document.getElementById('university');
         universitySelect.innerHTML = `<option value="">${translations[lang].select}...</option>`;
   
@@ -596,10 +592,7 @@
           await populateSelect('university', endpoint, 'name');
         }
       });
-    }
-
-    // Запускаем инициализацию при загрузке страницы
-    window.onload = initialize;
+    };
   </script>
 </body>
 </html>
