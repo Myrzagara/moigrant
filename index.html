@@ -423,7 +423,7 @@
     
     // Проверяем, что universities существует и является массивом
     if (!universities || !Array.isArray(universities)) {
-      universityHint.textContent = t.error;
+      universityHint.textContent = t.noUniversitiesFound;
       universityHint.classList.remove('hidden');
       return;
     }
