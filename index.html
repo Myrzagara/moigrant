@@ -523,7 +523,7 @@
       document.getElementById('payment-loading').classList.remove('hidden');
       
       // Имитация проверки оплаты (15 секунд)
-      await new Promise(resolve => setTimeout(resolve, 15000));
+      await new Promise(resolve => setTimeout(resolve, 1500));
       paymentVerified = true;
       await showResultPage();
     }
