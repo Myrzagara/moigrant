@@ -568,7 +568,20 @@
     async function showResultPage() {
       // Если оплата не подтверждена, не показываем результаты
       if (!paymentVerified) return;
-      
+       // Сбрасываем состояние оплаты
+  paymentVerified = false;
+  document.getElementById('verify-payment').classList.add('hidden');
+  document.getElementById('payment-loading').classList.add('hidden');
+  
+  document.getElementById('form-page').classList.add('hidden');
+  document.getElementById('payment-page').classList.remove('hidden');
+  
+  const paymentButton = document.getElementById('payment-button');
+  paymentButton.addEventListener('click', function() {
+    setTimeout(() => {
+      document.getElementById('verify-payment').classList.remove('hidden');
+    }, 1000);
+  });
       const score = document.getElementById('score').value;
       const specialtyId = document.getElementById('specialty').value;
       const universityId = document.getElementById('university').value;
@@ -645,6 +658,9 @@
     }
     
     function goBackToForm() {
+      paymentVerified = false;
+        document.getElementById('payment-loading').classList.add('hidden');
+  document.getElementById('verify-payment').classList.add('hidden');
       document.getElementById('result-page').classList.add('hidden');
       document.getElementById('form-page').classList.remove('hidden');
       
